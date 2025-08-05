@@ -184,10 +184,7 @@ app.Use(async (context, next) =>
     
     await next();
     
-    if (activity != null)
-    {
-        activity.SetTag("http.response.body.size", context.Response.ContentLength ?? 0);
-    }
+    activity?.SetTag("http.response.body.size", context.Response.ContentLength ?? 0);
 });
 
 app.UseAuthorization();
@@ -197,24 +194,22 @@ app.MapControllers();
 // Apply migrations on startup (optional - remove in production)
 if (app.Environment.IsDevelopment())
 {
-    using (var scope = app.Services.CreateScope())
+    using var scope = app.Services.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+
+    using var activity = Activity.Current?.Source.StartActivity("DatabaseMigration");
+    try
     {
-        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-        
-        using var activity = Activity.Current?.Source.StartActivity("DatabaseMigration");
-        try
-        {
-            logger.LogInformation("Applying database migrations...");
-            await dbContext.Database.MigrateAsync();
-            logger.LogInformation("Database migrations applied successfully.");
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "Error applying database migrations");
-            activity?.SetStatus(ActivityStatusCode.Error, ex.Message);
-            throw;
-        }
+        logger.LogInformation("Applying database migrations...");
+        await dbContext.Database.MigrateAsync();
+        logger.LogInformation("Database migrations applied successfully.");
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "Error applying database migrations");
+        activity?.SetStatus(ActivityStatusCode.Error, ex.Message);
+        throw;
     }
 }
 

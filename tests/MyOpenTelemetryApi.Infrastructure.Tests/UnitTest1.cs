@@ -183,12 +183,12 @@ public class InfrastructureTests
         if (isValid)
         {
             Assert.True(string.IsNullOrEmpty(tag.ColorHex) ||
-                       (tag.ColorHex.Length == 7 && tag.ColorHex.StartsWith("#")));
+                       (tag.ColorHex.Length == 7 && tag.ColorHex.StartsWith('#')));
         }
         else
         {
             Assert.False(tag.ColorHex?.Length == 7 &&
-                        tag.ColorHex.StartsWith("#") &&
+                        tag.ColorHex.StartsWith('#') &&
                         tag.ColorHex.Skip(1).All(c => "0123456789ABCDEFabcdef".Contains(c)));
         }
     }
