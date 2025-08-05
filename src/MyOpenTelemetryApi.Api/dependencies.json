@@ -1,0 +1,186 @@
+{
+  "version": 1,
+  "parameters": "--include-transitive",
+  "projects": [
+    {
+      "path": "C:/code/MyOpenTelemetryApi/src/MyOpenTelemetryApi.Api/MyOpenTelemetryApi.Api.csproj",
+      "frameworks": [
+        {
+          "framework": "net9.0",
+          "topLevelPackages": [
+            {
+              "id": "Microsoft.AspNetCore.OpenApi",
+              "requestedVersion": "9.0.8",
+              "resolvedVersion": "9.0.8"
+            },
+            {
+              "id": "Microsoft.EntityFrameworkCore.Design",
+              "requestedVersion": "9.0.8",
+              "resolvedVersion": "9.0.8"
+            },
+            {
+              "id": "Npgsql.EntityFrameworkCore.PostgreSQL",
+              "requestedVersion": "9.0.4",
+              "resolvedVersion": "9.0.4"
+            },
+            {
+              "id": "OpenTelemetry",
+              "requestedVersion": "1.12.0",
+              "resolvedVersion": "1.12.0"
+            },
+            {
+              "id": "OpenTelemetry.Exporter.Console",
+              "requestedVersion": "1.12.0",
+              "resolvedVersion": "1.12.0"
+            },
+            {
+              "id": "OpenTelemetry.Exporter.OpenTelemetryProtocol",
+              "requestedVersion": "1.12.0",
+              "resolvedVersion": "1.12.0"
+            },
+            {
+              "id": "OpenTelemetry.Extensions.Hosting",
+              "requestedVersion": "1.12.0",
+              "resolvedVersion": "1.12.0"
+            },
+            {
+              "id": "OpenTelemetry.Instrumentation.AspNetCore",
+              "requestedVersion": "1.12.0",
+              "resolvedVersion": "1.12.0"
+            },
+            {
+              "id": "OpenTelemetry.Instrumentation.EntityFrameworkCore",
+              "requestedVersion": "1.12.0-beta.2",
+              "resolvedVersion": "1.12.0-beta.2"
+            },
+            {
+              "id": "OpenTelemetry.Instrumentation.Http",
+              "requestedVersion": "1.12.0",
+              "resolvedVersion": "1.12.0"
+            },
+            {
+              "id": "OpenTelemetry.Instrumentation.Process",
+              "requestedVersion": "1.12.0-beta.1",
+              "resolvedVersion": "1.12.0-beta.1"
+            },
+            {
+              "id": "OpenTelemetry.Instrumentation.Runtime",
+              "requestedVersion": "1.12.0",
+              "resolvedVersion": "1.12.0"
+            }
+          ],
+          "transitivePackages": [
+            {
+              "id": "Humanizer.Core",
+              "resolvedVersion": "2.14.1"
+            },
+            {
+              "id": "Microsoft.Bcl.AsyncInterfaces",
+              "resolvedVersion": "7.0.0"
+            },
+            {
+              "id": "Microsoft.Build.Framework",
+              "resolvedVersion": "17.8.3"
+            },
+            {
+              "id": "Microsoft.Build.Locator",
+              "resolvedVersion": "1.7.8"
+            },
+            {
+              "id": "Microsoft.CodeAnalysis.Analyzers",
+              "resolvedVersion": "3.3.4"
+            },
+            {
+              "id": "Microsoft.CodeAnalysis.Common",
+              "resolvedVersion": "4.8.0"
+            },
+            {
+              "id": "Microsoft.CodeAnalysis.CSharp",
+              "resolvedVersion": "4.8.0"
+            },
+            {
+              "id": "Microsoft.CodeAnalysis.CSharp.Workspaces",
+              "resolvedVersion": "4.8.0"
+            },
+            {
+              "id": "Microsoft.CodeAnalysis.Workspaces.Common",
+              "resolvedVersion": "4.8.0"
+            },
+            {
+              "id": "Microsoft.CodeAnalysis.Workspaces.MSBuild",
+              "resolvedVersion": "4.8.0"
+            },
+            {
+              "id": "Microsoft.EntityFrameworkCore",
+              "resolvedVersion": "9.0.8"
+            },
+            {
+              "id": "Microsoft.EntityFrameworkCore.Abstractions",
+              "resolvedVersion": "9.0.8"
+            },
+            {
+              "id": "Microsoft.EntityFrameworkCore.Analyzers",
+              "resolvedVersion": "9.0.8"
+            },
+            {
+              "id": "Microsoft.EntityFrameworkCore.Relational",
+              "resolvedVersion": "9.0.8"
+            },
+            {
+              "id": "Microsoft.Extensions.DependencyModel",
+              "resolvedVersion": "9.0.8"
+            },
+            {
+              "id": "Microsoft.OpenApi",
+              "resolvedVersion": "1.6.17"
+            },
+            {
+              "id": "Mono.TextTemplating",
+              "resolvedVersion": "3.0.0"
+            },
+            {
+              "id": "Npgsql",
+              "resolvedVersion": "9.0.3"
+            },
+            {
+              "id": "OpenTelemetry.Api",
+              "resolvedVersion": "1.12.0"
+            },
+            {
+              "id": "OpenTelemetry.Api.ProviderBuilderExtensions",
+              "resolvedVersion": "1.12.0"
+            },
+            {
+              "id": "System.CodeDom",
+              "resolvedVersion": "6.0.0"
+            },
+            {
+              "id": "System.Composition",
+              "resolvedVersion": "7.0.0"
+            },
+            {
+              "id": "System.Composition.AttributedModel",
+              "resolvedVersion": "7.0.0"
+            },
+            {
+              "id": "System.Composition.Convention",
+              "resolvedVersion": "7.0.0"
+            },
+            {
+              "id": "System.Composition.Hosting",
+              "resolvedVersion": "7.0.0"
+            },
+            {
+              "id": "System.Composition.Runtime",
+              "resolvedVersion": "7.0.0"
+            },
+            {
+              "id": "System.Composition.TypedParts",
+              "resolvedVersion": "7.0.0"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

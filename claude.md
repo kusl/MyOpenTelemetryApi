@@ -370,3 +370,13 @@ cd ../..
 The package will eventually be updated to work with newer EF Core versions.
 
 Given that both packages are in preview/experimental state, I'd recommend Option 1 - just accept the warnings. The runtime handles the version difference fine through binding redirects, and your application works correctly.
+
+
+
+
+
+
+
+
+is there a way to follow transitive dependencies like this? 
+
