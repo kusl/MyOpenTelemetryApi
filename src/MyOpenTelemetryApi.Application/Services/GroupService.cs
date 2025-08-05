@@ -5,29 +5,22 @@ using MyOpenTelemetryApi.Domain.Interfaces;
 
 namespace MyOpenTelemetryApi.Application.Services;
 
-public class GroupService : IGroupService
+public class GroupService(IUnitOfWork unitOfWork) : IGroupService
 {
-    private readonly IUnitOfWork _unitOfWork;
-
-    public GroupService(IUnitOfWork unitOfWork)
-    {
-        _unitOfWork = unitOfWork;
-    }
-
     public async Task<GroupDto?> GetByIdAsync(Guid id)
     {
-        var group = await _unitOfWork.Groups.GetGroupWithContactsAsync(id);
+        Group? group = await unitOfWork.Groups.GetGroupWithContactsAsync(id);
         return group == null ? null : MapToDto(group);
     }
 
     public async Task<List<GroupDto>> GetAllAsync()
     {
-        var groups = await _unitOfWork.Groups.GetAllAsync();
-        var groupDtos = new List<GroupDto>();
+        IEnumerable<Group> groups = await unitOfWork.Groups.GetAllAsync();
+        List<GroupDto> groupDtos = [];
 
-        foreach (var group in groups)
+        foreach (Group group in groups)
         {
-            var groupWithContacts = await _unitOfWork.Groups.GetGroupWithContactsAsync(group.Id);
+            Group? groupWithContacts = await unitOfWork.Groups.GetGroupWithContactsAsync(group.Id);
             groupDtos.Add(MapToDto(groupWithContacts!));
         }
 
@@ -36,7 +29,7 @@ public class GroupService : IGroupService
 
     public async Task<GroupDto> CreateAsync(CreateGroupDto dto)
     {
-        var group = new Group
+        Group group = new()
         {
             Id = Guid.NewGuid(),
             Name = dto.Name,
@@ -44,33 +37,33 @@ public class GroupService : IGroupService
             CreatedAt = DateTime.UtcNow
         };
 
-        await _unitOfWork.Groups.AddAsync(group);
-        await _unitOfWork.SaveChangesAsync();
+        await unitOfWork.Groups.AddAsync(group);
+        await unitOfWork.SaveChangesAsync();
 
         return MapToDto(group);
     }
 
     public async Task<GroupDto?> UpdateAsync(Guid id, UpdateGroupDto dto)
     {
-        var group = await _unitOfWork.Groups.GetByIdAsync(id);
+        Group? group = await unitOfWork.Groups.GetByIdAsync(id);
         if (group == null) return null;
 
         group.Name = dto.Name;
         group.Description = dto.Description;
 
-        await _unitOfWork.Groups.UpdateAsync(group);
-        await _unitOfWork.SaveChangesAsync();
+        await unitOfWork.Groups.UpdateAsync(group);
+        await unitOfWork.SaveChangesAsync();
 
         return MapToDto(group);
     }
 
     public async Task<bool> DeleteAsync(Guid id)
     {
-        var group = await _unitOfWork.Groups.GetByIdAsync(id);
+        Group? group = await unitOfWork.Groups.GetByIdAsync(id);
         if (group == null) return false;
 
-        await _unitOfWork.Groups.DeleteAsync(group);
-        await _unitOfWork.SaveChangesAsync();
+        await unitOfWork.Groups.DeleteAsync(group);
+        await unitOfWork.SaveChangesAsync();
         return true;
     }
 

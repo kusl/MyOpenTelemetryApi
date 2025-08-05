@@ -9,5 +9,5 @@ public class Group
     public DateTime CreatedAt { get; set; }
 
     // Navigation property
-    public List<ContactGroup> ContactGroups { get; set; } = new();
+    public List<ContactGroup> ContactGroups { get; set; } = [];
 }

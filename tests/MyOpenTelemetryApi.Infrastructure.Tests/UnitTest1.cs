@@ -11,7 +11,7 @@ public class InfrastructureTests
     public void Contact_Entity_HasCorrectDefaults()
     {
         // Arrange & Act
-        var contact = new Contact();
+        Contact contact = new();
 
         // Assert
         Assert.NotNull(contact.FirstName);
@@ -32,7 +32,7 @@ public class InfrastructureTests
     public void EmailAddress_Entity_CanBeCreated()
     {
         // Arrange & Act
-        var email = new EmailAddress
+        EmailAddress email = new()
         {
             Id = Guid.NewGuid(),
             ContactId = Guid.NewGuid(),
@@ -53,7 +53,7 @@ public class InfrastructureTests
     public void PhoneNumber_Entity_CanBeCreated()
     {
         // Arrange & Act
-        var phone = new PhoneNumber
+        PhoneNumber phone = new()
         {
             Id = Guid.NewGuid(),
             ContactId = Guid.NewGuid(),
@@ -74,7 +74,7 @@ public class InfrastructureTests
     public void Address_Entity_CanBeCreated()
     {
         // Arrange & Act
-        var address = new Address
+        Address address = new()
         {
             Id = Guid.NewGuid(),
             ContactId = Guid.NewGuid(),
@@ -103,7 +103,7 @@ public class InfrastructureTests
     public void Group_Entity_HasCorrectDefaults()
     {
         // Arrange & Act
-        var group = new Group();
+        Group group = new();
 
         // Assert
         Assert.NotNull(group.Name);
@@ -115,7 +115,7 @@ public class InfrastructureTests
     public void Tag_Entity_HasCorrectDefaults()
     {
         // Arrange & Act
-        var tag = new Tag();
+        Tag tag = new();
 
         // Assert
         Assert.NotNull(tag.Name);
@@ -127,12 +127,12 @@ public class InfrastructureTests
     public void ContactGroup_JoinEntity_CanBeCreated()
     {
         // Arrange
-        var contactId = Guid.NewGuid();
-        var groupId = Guid.NewGuid();
-        var addedAt = DateTime.UtcNow;
+        Guid contactId = Guid.NewGuid();
+        Guid groupId = Guid.NewGuid();
+        DateTime addedAt = DateTime.UtcNow;
 
         // Act
-        var contactGroup = new ContactGroup
+        ContactGroup contactGroup = new()
         {
             ContactId = contactId,
             GroupId = groupId,
@@ -149,11 +149,11 @@ public class InfrastructureTests
     public void ContactTag_JoinEntity_CanBeCreated()
     {
         // Arrange
-        var contactId = Guid.NewGuid();
-        var tagId = Guid.NewGuid();
+        Guid contactId = Guid.NewGuid();
+        Guid tagId = Guid.NewGuid();
 
         // Act
-        var contactTag = new ContactTag
+        ContactTag contactTag = new()
         {
             ContactId = contactId,
             TagId = tagId
@@ -177,7 +177,7 @@ public class InfrastructureTests
     {
         // This tests the expected format for color hex values
         // Arrange & Act
-        var tag = new Tag { Name = "Test", ColorHex = colorHex };
+        Tag tag = new() { Name = "Test", ColorHex = colorHex };
 
         // Assert
         if (isValid)

@@ -7,17 +7,8 @@ namespace MyOpenTelemetryApi.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class HealthController : ControllerBase
+public class HealthController(AppDbContext dbContext, ILogger<HealthController> logger) : ControllerBase
 {
-    private readonly AppDbContext _dbContext;
-    private readonly ILogger<HealthController> _logger;
-
-    public HealthController(AppDbContext dbContext, ILogger<HealthController> logger)
-    {
-        _dbContext = dbContext;
-        _logger = logger;
-    }
-
     [HttpGet]
     public async Task<IActionResult> GetHealth()
     {
@@ -31,12 +22,12 @@ public class HealthController : ControllerBase
         try
         {
             // Test database connectivity
-            await _dbContext.Database.CanConnectAsync();
+            await dbContext.Database.CanConnectAsync();
             return Ok(health);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Health check failed");
+            logger.LogError(ex, "Health check failed");
             return StatusCode(503, new
             {
                 Status = "Unhealthy",
@@ -53,8 +44,8 @@ public class HealthController : ControllerBase
         try
         {
             // Check if database is accessible and migrations are applied
-            await _dbContext.Database.CanConnectAsync();
-            var pendingMigrations = await _dbContext.Database.GetPendingMigrationsAsync();
+            await dbContext.Database.CanConnectAsync();
+            IEnumerable<string> pendingMigrations = await dbContext.Database.GetPendingMigrationsAsync();
 
             if (pendingMigrations.Any())
             {
@@ -74,7 +65,7 @@ public class HealthController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Readiness check failed");
+            logger.LogError(ex, "Readiness check failed");
             return StatusCode(503, new
             {
                 Status = "Not Ready",

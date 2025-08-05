@@ -7,28 +7,19 @@ namespace MyOpenTelemetryApi.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class GroupsController : ControllerBase
+public class GroupsController(IGroupService groupService, ILogger<GroupsController> logger) : ControllerBase
 {
-    private readonly IGroupService _groupService;
-    private readonly ILogger<GroupsController> _logger;
-
-    public GroupsController(IGroupService groupService, ILogger<GroupsController> logger)
-    {
-        _groupService = groupService;
-        _logger = logger;
-    }
-
     [HttpGet]
     public async Task<ActionResult<List<GroupDto>>> GetGroups()
     {
-        var groups = await _groupService.GetAllAsync();
+        List<GroupDto> groups = await groupService.GetAllAsync();
         return Ok(groups);
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<GroupDto>> GetGroup(Guid id)
     {
-        var group = await _groupService.GetByIdAsync(id);
+        GroupDto? group = await groupService.GetByIdAsync(id);
         if (group == null)
         {
             return NotFound();
@@ -41,12 +32,12 @@ public class GroupsController : ControllerBase
     {
         try
         {
-            var group = await _groupService.CreateAsync(dto);
+            GroupDto group = await groupService.CreateAsync(dto);
             return CreatedAtAction(nameof(GetGroup), new { id = group.Id }, group);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error creating group");
+            logger.LogError(ex, "Error creating group");
             return StatusCode(500, "An error occurred while creating the group.");
         }
     }
@@ -56,7 +47,7 @@ public class GroupsController : ControllerBase
     {
         try
         {
-            var group = await _groupService.UpdateAsync(id, dto);
+            GroupDto? group = await groupService.UpdateAsync(id, dto);
             if (group == null)
             {
                 return NotFound();
@@ -65,7 +56,7 @@ public class GroupsController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error updating group {GroupId}", id);
+            logger.LogError(ex, "Error updating group {GroupId}", id);
             return StatusCode(500, "An error occurred while updating the group.");
         }
     }
@@ -73,7 +64,7 @@ public class GroupsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteGroup(Guid id)
     {
-        var deleted = await _groupService.DeleteAsync(id);
+        bool deleted = await groupService.DeleteAsync(id);
         if (!deleted)
         {
             return NotFound();

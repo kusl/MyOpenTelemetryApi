@@ -5,56 +5,49 @@ using MyOpenTelemetryApi.Domain.Interfaces;
 
 namespace MyOpenTelemetryApi.Application.Services;
 
-public class TagService : ITagService
+public class TagService(IUnitOfWork unitOfWork) : ITagService
 {
-    private readonly IUnitOfWork _unitOfWork;
-
-    public TagService(IUnitOfWork unitOfWork)
-    {
-        _unitOfWork = unitOfWork;
-    }
-
     public async Task<TagDto?> GetByIdAsync(Guid id)
     {
-        var tag = await _unitOfWork.Tags.GetByIdAsync(id);
+        Tag? tag = await unitOfWork.Tags.GetByIdAsync(id);
         return tag == null ? null : MapToDto(tag);
     }
 
     public async Task<List<TagDto>> GetAllAsync()
     {
-        var tags = await _unitOfWork.Tags.GetAllAsync();
-        return tags.Select(MapToDto).ToList();
+        IEnumerable<Tag> tags = await unitOfWork.Tags.GetAllAsync();
+        return [.. tags.Select(MapToDto)];
     }
 
     public async Task<TagDto> CreateAsync(CreateTagDto dto)
     {
         // Check if tag with same name already exists
-        var existingTag = await _unitOfWork.Tags.GetByNameAsync(dto.Name);
+        Tag? existingTag = await unitOfWork.Tags.GetByNameAsync(dto.Name);
         if (existingTag != null)
         {
             throw new InvalidOperationException($"Tag with name '{dto.Name}' already exists.");
         }
 
-        var tag = new Tag
+        Tag tag = new()
         {
             Id = Guid.NewGuid(),
             Name = dto.Name,
             ColorHex = dto.ColorHex
         };
 
-        await _unitOfWork.Tags.AddAsync(tag);
-        await _unitOfWork.SaveChangesAsync();
+        await unitOfWork.Tags.AddAsync(tag);
+        await unitOfWork.SaveChangesAsync();
 
         return MapToDto(tag);
     }
 
     public async Task<TagDto?> UpdateAsync(Guid id, CreateTagDto dto)
     {
-        var tag = await _unitOfWork.Tags.GetByIdAsync(id);
+        Tag? tag = await unitOfWork.Tags.GetByIdAsync(id);
         if (tag == null) return null;
 
         // Check if another tag with the same name exists
-        var existingTag = await _unitOfWork.Tags.GetByNameAsync(dto.Name);
+        Tag? existingTag = await unitOfWork.Tags.GetByNameAsync(dto.Name);
         if (existingTag != null && existingTag.Id != id)
         {
             throw new InvalidOperationException($"Tag with name '{dto.Name}' already exists.");
@@ -63,19 +56,19 @@ public class TagService : ITagService
         tag.Name = dto.Name;
         tag.ColorHex = dto.ColorHex;
 
-        await _unitOfWork.Tags.UpdateAsync(tag);
-        await _unitOfWork.SaveChangesAsync();
+        await unitOfWork.Tags.UpdateAsync(tag);
+        await unitOfWork.SaveChangesAsync();
 
         return MapToDto(tag);
     }
 
     public async Task<bool> DeleteAsync(Guid id)
     {
-        var tag = await _unitOfWork.Tags.GetByIdAsync(id);
+        Tag? tag = await unitOfWork.Tags.GetByIdAsync(id);
         if (tag == null) return false;
 
-        await _unitOfWork.Tags.DeleteAsync(tag);
-        await _unitOfWork.SaveChangesAsync();
+        await unitOfWork.Tags.DeleteAsync(tag);
+        await unitOfWork.SaveChangesAsync();
         return true;
     }
 

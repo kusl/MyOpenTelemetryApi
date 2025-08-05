@@ -19,7 +19,7 @@ public static class TelemetryExtensions
         this TracerProviderBuilder builder,
         IConfiguration configuration)
     {
-        var enabled = configuration.GetValue<bool>("OpenTelemetry:Exporter:File:Enabled");
+        bool enabled = configuration.GetValue<bool>("OpenTelemetry:Exporter:File:Enabled");
         if (enabled)
         {
             _ = configuration.GetValue<string>("OpenTelemetry:Exporter:File:TracePath")

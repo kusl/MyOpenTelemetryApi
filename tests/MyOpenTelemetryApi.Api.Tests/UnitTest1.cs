@@ -18,7 +18,7 @@ public class ApiTests
     public void PaginatedResultDto_CalculatesTotalPagesCorrectly()
     {
         // Arrange
-        var result = new PaginatedResultDto<string>
+        PaginatedResultDto<string> result = new()
         {
             TotalCount = 95,
             PageSize = 10
@@ -32,8 +32,8 @@ public class ApiTests
     public void PaginatedResultDto_HasPreviousPage_WorksCorrectly()
     {
         // Arrange
-        var result1 = new PaginatedResultDto<string> { PageNumber = 1 };
-        var result2 = new PaginatedResultDto<string> { PageNumber = 2 };
+        PaginatedResultDto<string> result1 = new() { PageNumber = 1 };
+        PaginatedResultDto<string> result2 = new() { PageNumber = 2 };
 
         // Act & Assert
         Assert.False(result1.HasPreviousPage);
@@ -44,7 +44,7 @@ public class ApiTests
     public void PaginatedResultDto_HasNextPage_WorksCorrectly()
     {
         // Arrange
-        var result = new PaginatedResultDto<string>
+        PaginatedResultDto<string> result = new()
         {
             PageNumber = 3,
             PageSize = 10,
@@ -65,7 +65,7 @@ public class ApiTests
     public void PaginatedResultDto_TotalPages_CalculatesCorrectly(int totalCount, int pageSize, int expectedPages)
     {
         // Arrange
-        var result = new PaginatedResultDto<string>
+        PaginatedResultDto<string> result = new()
         {
             TotalCount = totalCount,
             PageSize = pageSize

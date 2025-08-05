@@ -19,9 +19,9 @@ public class FileLogExporter : BaseExporter<LogRecord>
             WriteIndented = false,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
-        
+
         // Ensure directory exists
-        var directory = Path.GetDirectoryName(_filePath);
+        string? directory = Path.GetDirectoryName(_filePath);
         if (!string.IsNullOrEmpty(directory))
         {
             Directory.CreateDirectory(directory);
@@ -34,9 +34,9 @@ public class FileLogExporter : BaseExporter<LogRecord>
         {
             lock (_lockObject)
             {
-                using var writer = new StreamWriter(_filePath, append: true);
+                using StreamWriter writer = new(_filePath, append: true);
                 
-                foreach (var logRecord in batch)
+                foreach (LogRecord logRecord in batch)
                 {
                     var logEntry = new
                     {
@@ -52,8 +52,8 @@ public class FileLogExporter : BaseExporter<LogRecord>
                         Exception = logRecord.Exception?.ToString(),
                         Attributes = ExtractAttributes(logRecord)
                     };
-                    
-                    var json = JsonSerializer.Serialize(logEntry, _jsonOptions);
+
+                    string json = JsonSerializer.Serialize(logEntry, _jsonOptions);
                     writer.WriteLine(json);
                 }
             }
@@ -69,7 +69,7 @@ public class FileLogExporter : BaseExporter<LogRecord>
 
     private static List<object> ExtractScopeValues(LogRecord logRecord)
     {
-        var scopes = new List<object>();
+        List<object> scopes = [];
         
         logRecord.ForEachScope((scope, state) =>
         {
@@ -84,11 +84,11 @@ public class FileLogExporter : BaseExporter<LogRecord>
 
     private static Dictionary<string, object?> ExtractAttributes(LogRecord logRecord)
     {
-        var attributes = new Dictionary<string, object?>();
+        Dictionary<string, object?> attributes = [];
         
         if (logRecord.Attributes != null)
         {
-            foreach (var attribute in logRecord.Attributes)
+            foreach (KeyValuePair<string, object?> attribute in logRecord.Attributes)
             {
                 attributes[attribute.Key] = attribute.Value;
             }

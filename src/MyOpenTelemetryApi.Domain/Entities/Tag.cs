@@ -8,5 +8,5 @@ public class Tag
     public string? ColorHex { get; set; }
 
     // Navigation property
-    public List<ContactTag> ContactTags { get; set; } = new();
+    public List<ContactTag> ContactTags { get; set; } = [];
 }

@@ -35,12 +35,12 @@ public class ContactService : IContactService
 
     public async Task<ContactDto?> GetByIdAsync(Guid id)
     {
-        using var activity = _activitySource.StartActivity("GetContactById", ActivityKind.Internal);
+        using Activity? activity = _activitySource.StartActivity("GetContactById", ActivityKind.Internal);
         activity?.SetTag("contact.id", id);
 
         _logger.LogInformation("Getting contact by ID: {ContactId}", id);
 
-        var contact = await _unitOfWork.Contacts.GetByIdAsync(id);
+        Contact? contact = await _unitOfWork.Contacts.GetByIdAsync(id);
 
         if (contact == null)
         {
@@ -53,12 +53,12 @@ public class ContactService : IContactService
 
     public async Task<ContactDto?> GetWithDetailsAsync(Guid id)
     {
-        using var activity = _activitySource.StartActivity("GetContactWithDetails", ActivityKind.Internal);
+        using Activity? activity = _activitySource.StartActivity("GetContactWithDetails", ActivityKind.Internal);
         activity?.SetTag("contact.id", id);
 
         _logger.LogInformation("Getting contact with details: {ContactId}", id);
 
-        var contact = await _unitOfWork.Contacts.GetContactWithDetailsAsync(id);
+        Contact? contact = await _unitOfWork.Contacts.GetContactWithDetailsAsync(id);
 
         if (contact == null)
         {
@@ -77,22 +77,21 @@ public class ContactService : IContactService
 
     public async Task<PaginatedResultDto<ContactSummaryDto>> GetPaginatedAsync(int pageNumber, int pageSize)
     {
-        using var activity = _activitySource.StartActivity("GetContactsPaginated", ActivityKind.Internal);
+        using Activity? activity = _activitySource.StartActivity("GetContactsPaginated", ActivityKind.Internal);
         activity?.SetTag("page.number", pageNumber);
         activity?.SetTag("page.size", pageSize);
 
         _logger.LogInformation("Getting paginated contacts: Page {PageNumber}, Size {PageSize}", pageNumber, pageSize);
 
-        var allContacts = await _unitOfWork.Contacts.GetAllAsync();
-        var totalCount = allContacts.Count();
+        IEnumerable<Contact> allContacts = await _unitOfWork.Contacts.GetAllAsync();
+        int totalCount = allContacts.Count();
 
         activity?.SetTag("total.count", totalCount);
 
-        var pagedContacts = allContacts
+        List<ContactSummaryDto> pagedContacts = [.. allContacts
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
-            .Select(MapToSummaryDto)
-            .ToList();
+            .Select(MapToSummaryDto)];
 
         return new PaginatedResultDto<ContactSummaryDto>
         {
@@ -105,14 +104,14 @@ public class ContactService : IContactService
 
     public async Task<List<ContactSummaryDto>> SearchAsync(string searchTerm)
     {
-        using var activity = _activitySource.StartActivity("SearchContacts", ActivityKind.Internal);
+        using Activity? activity = _activitySource.StartActivity("SearchContacts", ActivityKind.Internal);
         activity?.SetTag("search.term", searchTerm);
 
-        var stopwatch = Stopwatch.StartNew();
+        Stopwatch stopwatch = Stopwatch.StartNew();
         _logger.LogInformation("Searching contacts with term: {SearchTerm}", searchTerm);
 
-        var contacts = await _unitOfWork.Contacts.SearchContactsAsync(searchTerm);
-        var results = contacts.Select(MapToSummaryDto).ToList();
+        IEnumerable<Contact> contacts = await _unitOfWork.Contacts.SearchContactsAsync(searchTerm);
+        List<ContactSummaryDto> results = [.. contacts.Select(MapToSummaryDto)];
 
         stopwatch.Stop();
 
@@ -127,13 +126,13 @@ public class ContactService : IContactService
 
     public async Task<ContactDto> CreateAsync(CreateContactDto dto)
     {
-        using var activity = _activitySource.StartActivity("CreateContact", ActivityKind.Internal);
+        using Activity? activity = _activitySource.StartActivity("CreateContact", ActivityKind.Internal);
 
         _logger.LogInformation("Creating new contact: {FirstName} {LastName}", dto.FirstName, dto.LastName);
 
         try
         {
-            var contact = new Contact
+            Contact contact = new()
             {
                 Id = Guid.NewGuid(),
                 FirstName = dto.FirstName,
@@ -152,7 +151,7 @@ public class ContactService : IContactService
             activity?.SetTag("contact.company", contact.Company);
 
             // Add email addresses
-            foreach (var emailDto in dto.EmailAddresses)
+            foreach (CreateEmailAddressDto emailDto in dto.EmailAddresses)
             {
                 contact.EmailAddresses.Add(new EmailAddress
                 {
@@ -164,7 +163,7 @@ public class ContactService : IContactService
             }
 
             // Add phone numbers
-            foreach (var phoneDto in dto.PhoneNumbers)
+            foreach (CreatePhoneNumberDto phoneDto in dto.PhoneNumbers)
             {
                 contact.PhoneNumbers.Add(new PhoneNumber
                 {
@@ -176,7 +175,7 @@ public class ContactService : IContactService
             }
 
             // Add addresses
-            foreach (var addressDto in dto.Addresses)
+            foreach (CreateAddressDto addressDto in dto.Addresses)
             {
                 contact.Addresses.Add(new Address
                 {
@@ -193,7 +192,7 @@ public class ContactService : IContactService
             }
 
             // Add to groups
-            foreach (var groupId in dto.GroupIds)
+            foreach (Guid groupId in dto.GroupIds)
             {
                 contact.ContactGroups.Add(new ContactGroup
                 {
@@ -203,7 +202,7 @@ public class ContactService : IContactService
             }
 
             // Add tags
-            foreach (var tagId in dto.TagIds)
+            foreach (Guid tagId in dto.TagIds)
             {
                 contact.Tags.Add(new ContactTag
                 {
@@ -231,12 +230,12 @@ public class ContactService : IContactService
 
     public async Task<ContactDto?> UpdateAsync(Guid id, UpdateContactDto dto)
     {
-        using var activity = _activitySource.StartActivity("UpdateContact", ActivityKind.Internal);
+        using Activity? activity = _activitySource.StartActivity("UpdateContact", ActivityKind.Internal);
         activity?.SetTag("contact.id", id);
 
         _logger.LogInformation("Updating contact: {ContactId}", id);
 
-        var contact = await _unitOfWork.Contacts.GetByIdAsync(id);
+        Contact? contact = await _unitOfWork.Contacts.GetByIdAsync(id);
         if (contact == null)
         {
             _logger.LogWarning("Contact not found for update: {ContactId}", id);
@@ -264,12 +263,12 @@ public class ContactService : IContactService
 
     public async Task<bool> DeleteAsync(Guid id)
     {
-        using var activity = _activitySource.StartActivity("DeleteContact", ActivityKind.Internal);
+        using Activity? activity = _activitySource.StartActivity("DeleteContact", ActivityKind.Internal);
         activity?.SetTag("contact.id", id);
 
         _logger.LogInformation("Deleting contact: {ContactId}", id);
 
-        var contact = await _unitOfWork.Contacts.GetByIdAsync(id);
+        Contact? contact = await _unitOfWork.Contacts.GetByIdAsync(id);
         if (contact == null)
         {
             _logger.LogWarning("Contact not found for deletion: {ContactId}", id);
@@ -288,13 +287,13 @@ public class ContactService : IContactService
 
     public async Task<List<ContactSummaryDto>> GetByGroupAsync(Guid groupId)
     {
-        using var activity = _activitySource.StartActivity("GetContactsByGroup", ActivityKind.Internal);
+        using Activity? activity = _activitySource.StartActivity("GetContactsByGroup", ActivityKind.Internal);
         activity?.SetTag("group.id", groupId);
 
         _logger.LogInformation("Getting contacts by group: {GroupId}", groupId);
 
-        var contacts = await _unitOfWork.Contacts.GetContactsByGroupAsync(groupId);
-        var results = contacts.Select(MapToSummaryDto).ToList();
+        IEnumerable<Contact> contacts = await _unitOfWork.Contacts.GetContactsByGroupAsync(groupId);
+        List<ContactSummaryDto> results = [.. contacts.Select(MapToSummaryDto)];
 
         activity?.SetTag("result.count", results.Count);
         _logger.LogInformation("Found {Count} contacts in group {GroupId}", results.Count, groupId);
@@ -304,13 +303,13 @@ public class ContactService : IContactService
 
     public async Task<List<ContactSummaryDto>> GetByTagAsync(Guid tagId)
     {
-        using var activity = _activitySource.StartActivity("GetContactsByTag", ActivityKind.Internal);
+        using Activity? activity = _activitySource.StartActivity("GetContactsByTag", ActivityKind.Internal);
         activity?.SetTag("tag.id", tagId);
 
         _logger.LogInformation("Getting contacts by tag: {TagId}", tagId);
 
-        var contacts = await _unitOfWork.Contacts.GetContactsByTagAsync(tagId);
-        var results = contacts.Select(MapToSummaryDto).ToList();
+        IEnumerable<Contact> contacts = await _unitOfWork.Contacts.GetContactsByTagAsync(tagId);
+        List<ContactSummaryDto> results = [.. contacts.Select(MapToSummaryDto)];
 
         activity?.SetTag("result.count", results.Count);
         _logger.LogInformation("Found {Count} contacts with tag {TagId}", results.Count, tagId);
@@ -336,27 +335,27 @@ public class ContactService : IContactService
         };
     }
 
-    private ContactDto MapToDetailedDto(Contact contact)
+    private static ContactDto MapToDetailedDto(Contact contact)
     {
-        var dto = MapToDto(contact);
+        ContactDto dto = MapToDto(contact);
 
-        dto.EmailAddresses = contact.EmailAddresses.Select(e => new EmailAddressDto
+        dto.EmailAddresses = [.. contact.EmailAddresses.Select(e => new EmailAddressDto
         {
             Id = e.Id,
             Email = e.Email,
             Type = e.Type.ToString(),
             IsPrimary = e.IsPrimary
-        }).ToList();
+        })];
 
-        dto.PhoneNumbers = contact.PhoneNumbers.Select(p => new PhoneNumberDto
+        dto.PhoneNumbers = [.. contact.PhoneNumbers.Select(p => new PhoneNumberDto
         {
             Id = p.Id,
             Number = p.Number,
             Type = p.Type.ToString(),
             IsPrimary = p.IsPrimary
-        }).ToList();
+        })];
 
-        dto.Addresses = contact.Addresses.Select(a => new AddressDto
+        dto.Addresses = [.. contact.Addresses.Select(a => new AddressDto
         {
             Id = a.Id,
             StreetLine1 = a.StreetLine1,
@@ -367,22 +366,22 @@ public class ContactService : IContactService
             Country = a.Country,
             Type = a.Type.ToString(),
             IsPrimary = a.IsPrimary
-        }).ToList();
+        })];
 
-        dto.Groups = contact.ContactGroups.Select(cg => new GroupDto
+        dto.Groups = [.. contact.ContactGroups.Select(cg => new GroupDto
         {
             Id = cg.Group.Id,
             Name = cg.Group.Name,
             Description = cg.Group.Description,
             CreatedAt = cg.Group.CreatedAt
-        }).ToList();
+        })];
 
-        dto.Tags = contact.Tags.Select(ct => new TagDto
+        dto.Tags = [.. contact.Tags.Select(ct => new TagDto
         {
             Id = ct.Tag.Id,
             Name = ct.Tag.Name,
             ColorHex = ct.Tag.ColorHex
-        }).ToList();
+        })];
 
         return dto;
     }

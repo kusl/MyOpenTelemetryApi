@@ -7,28 +7,19 @@ namespace MyOpenTelemetryApi.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class TagsController : ControllerBase
+public class TagsController(ITagService tagService, ILogger<TagsController> logger) : ControllerBase
 {
-    private readonly ITagService _tagService;
-    private readonly ILogger<TagsController> _logger;
-
-    public TagsController(ITagService tagService, ILogger<TagsController> logger)
-    {
-        _tagService = tagService;
-        _logger = logger;
-    }
-
     [HttpGet]
     public async Task<ActionResult<List<TagDto>>> GetTags()
     {
-        var tags = await _tagService.GetAllAsync();
+        List<TagDto> tags = await tagService.GetAllAsync();
         return Ok(tags);
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<TagDto>> GetTag(Guid id)
     {
-        var tag = await _tagService.GetByIdAsync(id);
+        TagDto? tag = await tagService.GetByIdAsync(id);
         if (tag == null)
         {
             return NotFound();
@@ -41,7 +32,7 @@ public class TagsController : ControllerBase
     {
         try
         {
-            var tag = await _tagService.CreateAsync(dto);
+            TagDto tag = await tagService.CreateAsync(dto);
             return CreatedAtAction(nameof(GetTag), new { id = tag.Id }, tag);
         }
         catch (InvalidOperationException ex)
@@ -50,7 +41,7 @@ public class TagsController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error creating tag");
+            logger.LogError(ex, "Error creating tag");
             return StatusCode(500, "An error occurred while creating the tag.");
         }
     }
@@ -60,7 +51,7 @@ public class TagsController : ControllerBase
     {
         try
         {
-            var tag = await _tagService.UpdateAsync(id, dto);
+            TagDto? tag = await tagService.UpdateAsync(id, dto);
             if (tag == null)
             {
                 return NotFound();
@@ -73,7 +64,7 @@ public class TagsController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error updating tag {TagId}", id);
+            logger.LogError(ex, "Error updating tag {TagId}", id);
             return StatusCode(500, "An error occurred while updating the tag.");
         }
     }
@@ -81,7 +72,7 @@ public class TagsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTag(Guid id)
     {
-        var deleted = await _tagService.DeleteAsync(id);
+        bool deleted = await tagService.DeleteAsync(id);
         if (!deleted)
         {
             return NotFound();

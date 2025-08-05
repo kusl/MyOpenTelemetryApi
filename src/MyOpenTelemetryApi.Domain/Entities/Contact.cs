@@ -19,9 +19,9 @@ public class Contact
     public DateTime UpdatedAt { get; set; }
 
     // Navigation properties
-    public List<EmailAddress> EmailAddresses { get; set; } = new();
-    public List<PhoneNumber> PhoneNumbers { get; set; } = new();
-    public List<Address> Addresses { get; set; } = new();
-    public List<ContactGroup> ContactGroups { get; set; } = new();
-    public List<ContactTag> Tags { get; set; } = new();
+    public List<EmailAddress> EmailAddresses { get; set; } = [];
+    public List<PhoneNumber> PhoneNumbers { get; set; } = [];
+    public List<Address> Addresses { get; set; } = [];
+    public List<ContactGroup> ContactGroups { get; set; } = [];
+    public List<ContactTag> Tags { get; set; } = [];
 }

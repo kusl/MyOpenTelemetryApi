@@ -12,9 +12,9 @@ public class CreateContactDto
     public DateTime? DateOfBirth { get; set; }
     public string? Notes { get; set; }
 
-    public List<CreateEmailAddressDto> EmailAddresses { get; set; } = new();
-    public List<CreatePhoneNumberDto> PhoneNumbers { get; set; } = new();
-    public List<CreateAddressDto> Addresses { get; set; } = new();
-    public List<Guid> GroupIds { get; set; } = new();
-    public List<Guid> TagIds { get; set; } = new();
+    public List<CreateEmailAddressDto> EmailAddresses { get; set; } = [];
+    public List<CreatePhoneNumberDto> PhoneNumbers { get; set; } = [];
+    public List<CreateAddressDto> Addresses { get; set; } = [];
+    public List<Guid> GroupIds { get; set; } = [];
+    public List<Guid> TagIds { get; set; } = [];
 }

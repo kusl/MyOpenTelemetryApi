@@ -6,10 +6,8 @@ using MyOpenTelemetryApi.Infrastructure.Data;
 
 namespace MyOpenTelemetryApi.Infrastructure.Repositories;
 
-public class TagRepository : Repository<Tag>, ITagRepository
+public class TagRepository(AppDbContext context) : Repository<Tag>(context), ITagRepository
 {
-    public TagRepository(AppDbContext context) : base(context) { }
-
     public async Task<Tag?> GetByNameAsync(string name)
     {
         return await _context.Tags

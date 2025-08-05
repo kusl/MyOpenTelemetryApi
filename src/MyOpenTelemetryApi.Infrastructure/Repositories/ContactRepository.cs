@@ -6,10 +6,8 @@ using MyOpenTelemetryApi.Infrastructure.Data;
 
 namespace MyOpenTelemetryApi.Infrastructure.Repositories;
 
-public class ContactRepository : Repository<Contact>, IContactRepository
+public class ContactRepository(AppDbContext context) : Repository<Contact>(context), IContactRepository
 {
-    public ContactRepository(AppDbContext context) : base(context) { }
-
     public async Task<IEnumerable<Contact>> GetContactsByGroupAsync(Guid groupId)
     {
         return await _context.Contacts
@@ -41,7 +39,7 @@ public class ContactRepository : Repository<Contact>, IContactRepository
 
     public async Task<IEnumerable<Contact>> SearchContactsAsync(string searchTerm)
     {
-        var lowerSearchTerm = searchTerm.ToLower();
+        string lowerSearchTerm = searchTerm.ToLower();
 
         return await _context.Contacts
             .Include(c => c.EmailAddresses)

@@ -10,7 +10,7 @@ public class ApplicationTests
     public void ContactDto_Initialization_SetsDefaultValues()
     {
         // Arrange & Act
-        var dto = new ContactDto();
+        ContactDto dto = new();
 
         // Assert
         Assert.NotNull(dto.FirstName);
@@ -28,7 +28,7 @@ public class ApplicationTests
     public void CreateContactDto_Initialization_SetsDefaultValues()
     {
         // Arrange & Act
-        var dto = new CreateContactDto();
+        CreateContactDto dto = new();
 
         // Assert
         Assert.NotNull(dto.FirstName);
@@ -47,7 +47,7 @@ public class ApplicationTests
     public void EmailType_ParsesCorrectly(string input, EmailType expected)
     {
         // Act
-        var result = Enum.Parse<EmailType>(input);
+        EmailType result = Enum.Parse<EmailType>(input);
 
         // Assert
         Assert.Equal(expected, result);
@@ -62,7 +62,7 @@ public class ApplicationTests
     public void PhoneType_ParsesCorrectly(string input, PhoneType expected)
     {
         // Act
-        var result = Enum.Parse<PhoneType>(input);
+        PhoneType result = Enum.Parse<PhoneType>(input);
 
         // Assert
         Assert.Equal(expected, result);
@@ -75,7 +75,7 @@ public class ApplicationTests
     public void AddressType_ParsesCorrectly(string input, AddressType expected)
     {
         // Act
-        var result = Enum.Parse<AddressType>(input);
+        AddressType result = Enum.Parse<AddressType>(input);
 
         // Assert
         Assert.Equal(expected, result);
@@ -85,7 +85,7 @@ public class ApplicationTests
     public void TagDto_CanBeCreatedWithName()
     {
         // Arrange & Act
-        var tag = new TagDto
+        TagDto tag = new()
         {
             Id = Guid.NewGuid(),
             Name = "Important",
@@ -102,7 +102,7 @@ public class ApplicationTests
     public void GroupDto_ContactCountDefaultsToZero()
     {
         // Arrange & Act
-        var group = new GroupDto();
+        GroupDto group = new();
 
         // Assert
         Assert.Equal(0, group.ContactCount);
@@ -115,7 +115,7 @@ public class ApplicationTests
     public void UpdateContactDto_AcceptsVariousNoteValues(string? notes)
     {
         // Arrange & Act
-        var dto = new UpdateContactDto
+        UpdateContactDto dto = new()
         {
             FirstName = "John",
             LastName = "Doe",

@@ -6,10 +6,8 @@ using MyOpenTelemetryApi.Infrastructure.Data;
 
 namespace MyOpenTelemetryApi.Infrastructure.Repositories;
 
-public class GroupRepository : Repository<Group>, IGroupRepository
+public class GroupRepository(AppDbContext context) : Repository<Group>(context), IGroupRepository
 {
-    public GroupRepository(AppDbContext context) : base(context) { }
-
     public async Task<Group?> GetGroupWithContactsAsync(Guid id)
     {
         return await _context.Groups

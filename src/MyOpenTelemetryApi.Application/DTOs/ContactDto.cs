@@ -15,9 +15,9 @@ public class ContactDto
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 
-    public List<EmailAddressDto> EmailAddresses { get; set; } = new();
-    public List<PhoneNumberDto> PhoneNumbers { get; set; } = new();
-    public List<AddressDto> Addresses { get; set; } = new();
-    public List<GroupDto> Groups { get; set; } = new();
-    public List<TagDto> Tags { get; set; } = new();
+    public List<EmailAddressDto> EmailAddresses { get; set; } = [];
+    public List<PhoneNumberDto> PhoneNumbers { get; set; } = [];
+    public List<AddressDto> Addresses { get; set; } = [];
+    public List<GroupDto> Groups { get; set; } = [];
+    public List<TagDto> Tags { get; set; } = [];
 }
