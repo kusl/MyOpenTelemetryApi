@@ -1,270 +1,190 @@
-what does it mean by this and how do I fix it? 
+Looks like open telemetry itself is experimental for metrics and traces. 
+as such, I don't see a reason why the project can't update from 9.0.1 to 9.0.8 or whatever is latest. 
 
-Rebuild started at 5:59 AM...
-Restored C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Domain\MyOpenTelemetryApi.Domain.csproj (in 136 ms).
-Restored C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Application\MyOpenTelemetryApi.Application.csproj (in 139 ms).
-Restored C:\code\MyOpenTelemetryApi\tests\MyOpenTelemetryApi.Application.Tests\MyOpenTelemetryApi.Application.Tests.csproj (in 158 ms).
-Restored C:\code\MyOpenTelemetryApi\tests\MyOpenTelemetryApi.Infrastructure.Tests\MyOpenTelemetryApi.Infrastructure.Tests.csproj (in 159 ms).
-Restored C:\code\MyOpenTelemetryApi\tests\MyOpenTelemetryApi.Api.Tests\MyOpenTelemetryApi.Api.Tests.csproj (in 179 ms).
-1>------ Rebuild All started: Project: MyOpenTelemetryApi.Domain, Configuration: Debug Any CPU ------
-Restored C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Infrastructure\MyOpenTelemetryApi.Infrastructure.csproj (in 186 ms).
-Restored C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Api\MyOpenTelemetryApi.Api.csproj (in 187 ms).
-1>C:\Program Files\dotnet\sdk\10.0.100-preview.6.25358.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.RuntimeIdentifierInference.targets(335,5): message NETSDK1057: You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy
-1>MyOpenTelemetryApi.Domain -> C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Domain\bin\Debug\net9.0\MyOpenTelemetryApi.Domain.dll
-2>------ Rebuild All started: Project: MyOpenTelemetryApi.Infrastructure, Configuration: Debug Any CPU ------
-3>------ Rebuild All started: Project: MyOpenTelemetryApi.Application, Configuration: Debug Any CPU ------
-3>C:\Program Files\dotnet\sdk\10.0.100-preview.6.25358.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.RuntimeIdentifierInference.targets(335,5): message NETSDK1057: You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy
-2>MyOpenTelemetryApi.Infrastructure -> C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Infrastructure\bin\Debug\net9.0\MyOpenTelemetryApi.Infrastructure.dll
-4>------ Rebuild All started: Project: MyOpenTelemetryApi.Infrastructure.Tests, Configuration: Debug Any CPU ------
-4>C:\Program Files\Microsoft Visual Studio\2022\Preview\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets(2433,5): warning MSB3277: Found conflicts between different versions of "Microsoft.EntityFrameworkCore.Relational" that could not be resolved.
-4>C:\Program Files\Microsoft Visual Studio\2022\Preview\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets(2433,5): warning MSB3277: There was a conflict between "Microsoft.EntityFrameworkCore.Relational, Version=9.0.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" and "Microsoft.EntityFrameworkCore.Relational, Version=9.0.8.0, Culture=neutral, PublicKeyToken=adb9793829ddae60".
-4>C:\Program Files\Microsoft Visual Studio\2022\Preview\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets(2433,5): warning MSB3277:     "Microsoft.EntityFrameworkCore.Relational, Version=9.0.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" was chosen because it was primary and "Microsoft.EntityFrameworkCore.Relational, Version=9.0.8.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" was not.
-4>C:\Program Files\Microsoft Visual Studio\2022\Preview\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets(2433,5): warning MSB3277:     References which depend on "Microsoft.EntityFrameworkCore.Relational, Version=9.0.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" [C:\Users\kushal\.nuget\packages\microsoft.entityframeworkcore.relational\9.0.1\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll].
-4>C:\Program Files\Microsoft Visual Studio\2022\Preview\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets(2433,5): warning MSB3277:         C:\Users\kushal\.nuget\packages\microsoft.entityframeworkcore.relational\9.0.1\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll
-4>C:\Program Files\Microsoft Visual Studio\2022\Preview\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets(2433,5): warning MSB3277:           Project file item includes which caused reference "C:\Users\kushal\.nuget\packages\microsoft.entityframeworkcore.relational\9.0.1\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll".
-4>C:\Program Files\Microsoft Visual Studio\2022\Preview\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets(2433,5): warning MSB3277:             C:\Users\kushal\.nuget\packages\microsoft.entityframeworkcore.relational\9.0.1\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll
-4>C:\Program Files\Microsoft Visual Studio\2022\Preview\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets(2433,5): warning MSB3277:     References which depend on or have been unified to "Microsoft.EntityFrameworkCore.Relational, Version=9.0.8.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" [].
-4>C:\Program Files\Microsoft Visual Studio\2022\Preview\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets(2433,5): warning MSB3277:         C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Infrastructure\bin\Debug\net9.0\MyOpenTelemetryApi.Infrastructure.dll
-4>C:\Program Files\Microsoft Visual Studio\2022\Preview\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets(2433,5): warning MSB3277:           Project file item includes which caused reference "C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Infrastructure\bin\Debug\net9.0\MyOpenTelemetryApi.Infrastructure.dll".
-4>C:\Program Files\Microsoft Visual Studio\2022\Preview\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets(2433,5): warning MSB3277:             C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Infrastructure\bin\Debug\net9.0\MyOpenTelemetryApi.Infrastructure.dll
-4>MyOpenTelemetryApi.Infrastructure.Tests -> C:\code\MyOpenTelemetryApi\tests\MyOpenTelemetryApi.Infrastructure.Tests\bin\Debug\net9.0\MyOpenTelemetryApi.Infrastructure.Tests.dll
-4>Done building project "MyOpenTelemetryApi.Infrastructure.Tests.csproj".
-3>MyOpenTelemetryApi.Application -> C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Application\bin\Debug\net9.0\MyOpenTelemetryApi.Application.dll
-5>------ Rebuild All started: Project: MyOpenTelemetryApi.Application.Tests, Configuration: Debug Any CPU ------
-6>------ Rebuild All started: Project: MyOpenTelemetryApi.Api, Configuration: Debug Any CPU ------
-5>MyOpenTelemetryApi.Application.Tests -> C:\code\MyOpenTelemetryApi\tests\MyOpenTelemetryApi.Application.Tests\bin\Debug\net9.0\MyOpenTelemetryApi.Application.Tests.dll
-6>MyOpenTelemetryApi.Api -> C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Api\bin\Debug\net9.0\MyOpenTelemetryApi.Api.dll
-7>------ Rebuild All started: Project: MyOpenTelemetryApi.Api.Tests, Configuration: Debug Any CPU ------
-7>C:\Program Files\Microsoft Visual Studio\2022\Preview\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets(2433,5): warning MSB3277: Found conflicts between different versions of "Microsoft.EntityFrameworkCore.Relational" that could not be resolved.
-7>C:\Program Files\Microsoft Visual Studio\2022\Preview\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets(2433,5): warning MSB3277: There was a conflict between "Microsoft.EntityFrameworkCore.Relational, Version=9.0.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" and "Microsoft.EntityFrameworkCore.Relational, Version=9.0.8.0, Culture=neutral, PublicKeyToken=adb9793829ddae60".
-7>C:\Program Files\Microsoft Visual Studio\2022\Preview\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets(2433,5): warning MSB3277:     "Microsoft.EntityFrameworkCore.Relational, Version=9.0.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" was chosen because it was primary and "Microsoft.EntityFrameworkCore.Relational, Version=9.0.8.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" was not.
-7>C:\Program Files\Microsoft Visual Studio\2022\Preview\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets(2433,5): warning MSB3277:     References which depend on "Microsoft.EntityFrameworkCore.Relational, Version=9.0.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" [C:\Users\kushal\.nuget\packages\microsoft.entityframeworkcore.relational\9.0.1\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll].
-7>C:\Program Files\Microsoft Visual Studio\2022\Preview\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets(2433,5): warning MSB3277:         C:\Users\kushal\.nuget\packages\microsoft.entityframeworkcore.relational\9.0.1\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll
-7>C:\Program Files\Microsoft Visual Studio\2022\Preview\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets(2433,5): warning MSB3277:           Project file item includes which caused reference "C:\Users\kushal\.nuget\packages\microsoft.entityframeworkcore.relational\9.0.1\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll".
-7>C:\Program Files\Microsoft Visual Studio\2022\Preview\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets(2433,5): warning MSB3277:             C:\Users\kushal\.nuget\packages\microsoft.entityframeworkcore.relational\9.0.1\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll
-7>C:\Program Files\Microsoft Visual Studio\2022\Preview\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets(2433,5): warning MSB3277:     References which depend on or have been unified to "Microsoft.EntityFrameworkCore.Relational, Version=9.0.8.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" [].
-7>C:\Program Files\Microsoft Visual Studio\2022\Preview\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets(2433,5): warning MSB3277:         C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Api\bin\Debug\net9.0\MyOpenTelemetryApi.Api.dll
-7>C:\Program Files\Microsoft Visual Studio\2022\Preview\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets(2433,5): warning MSB3277:           Project file item includes which caused reference "C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Api\bin\Debug\net9.0\MyOpenTelemetryApi.Api.dll".
-7>C:\Program Files\Microsoft Visual Studio\2022\Preview\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets(2433,5): warning MSB3277:             C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Api\bin\Debug\net9.0\MyOpenTelemetryApi.Api.dll
-7>C:\Program Files\Microsoft Visual Studio\2022\Preview\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets(2433,5): warning MSB3277:         C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Infrastructure\bin\Debug\net9.0\MyOpenTelemetryApi.Infrastructure.dll
-7>C:\Program Files\Microsoft Visual Studio\2022\Preview\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets(2433,5): warning MSB3277:           Project file item includes which caused reference "C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Infrastructure\bin\Debug\net9.0\MyOpenTelemetryApi.Infrastructure.dll".
-7>C:\Program Files\Microsoft Visual Studio\2022\Preview\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets(2433,5): warning MSB3277:             C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Infrastructure\bin\Debug\net9.0\MyOpenTelemetryApi.Infrastructure.dll
-7>C:\Program Files\Microsoft Visual Studio\2022\Preview\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets(2433,5): warning MSB3277:             C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Api\bin\Debug\net9.0\MyOpenTelemetryApi.Api.dll
-7>MyOpenTelemetryApi.Api.Tests -> C:\code\MyOpenTelemetryApi\tests\MyOpenTelemetryApi.Api.Tests\bin\Debug\net9.0\MyOpenTelemetryApi.Api.Tests.dll
-7>Done building project "MyOpenTelemetryApi.Api.Tests.csproj".
-========== Rebuild All: 7 succeeded, 0 failed, 0 skipped ==========
-========== Rebuild completed at 5:59 AM and took 07.116 seconds ==========
+> Note: This component is based on the OpenTelemetry semantic conventions for metrics and traces. These conventions are Experimental, and hence, this package is a pre-release. Until a stable version is released, there can be breaking changes.
 
-PS C:\code\MyOpenTelemetryApi> Set-Location "C:\Code\MyOpenTelemetryApi\"; Get-Date -Format "yyyy-MM-dd HH:mm:ss"; dotnet restore; Get-Date -Format "yyyy-MM-dd HH:mm:ss"; dotnet clean; Get-Date -Format "yyyy-MM-dd HH:mm:ss"; dotnet build; Get-Date -Format "yyyy-MM-dd HH:mm:ss"; dotnet test; Get-Date -Format "yyyy-MM-dd HH:mm:ss"; git status; Get-Date -Format "yyyy-MM-dd HH:mm:ss"; git remote show origin; Get-Date -Format "yyyy-MM-dd HH:mm:ss";
-2025-08-05 06:00:50
-Restore complete (2.6s)
+context: 
+# EntityFrameworkCore Instrumentation for OpenTelemetry .NET
 
-Build succeeded in 2.9s
-2025-08-05 06:00:54
-You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy
+| Status      |           |
+| ----------- | --------- |
+| Stability   | [Beta](../../README.md#beta) |
+| Code Owners | [@martincostello](https://github.com/martincostello), [@matt-hensley](https://github.com/matt-hensley) |
 
-Build succeeded in 2.0s
-2025-08-05 06:00:56
-Restore complete (2.0s)
-You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy
-  MyOpenTelemetryApi.Domain succeeded (0.6s) → src\MyOpenTelemetryApi.Domain\bin\Debug\net9.0\MyOpenTelemetryApi.Domain.dll
-  MyOpenTelemetryApi.Application succeeded (1.1s) → src\MyOpenTelemetryApi.Application\bin\Debug\net9.0\MyOpenTelemetryApi.Application.dll
-  MyOpenTelemetryApi.Infrastructure succeeded (1.3s) → src\MyOpenTelemetryApi.Infrastructure\bin\Debug\net9.0\MyOpenTelemetryApi.Infrastructure.dll
-  MyOpenTelemetryApi.Application.Tests succeeded (0.8s) → tests\MyOpenTelemetryApi.Application.Tests\bin\Debug\net9.0\MyOpenTelemetryApi.Application.Tests.dll
-  MyOpenTelemetryApi.Infrastructure.Tests succeeded with 1 warning(s) (1.9s) → tests\MyOpenTelemetryApi.Infrastructure.Tests\bin\Debug\net9.0\MyOpenTelemetryApi.Infrastructure.Tests.dll
-    C:\Program Files\dotnet\sdk\10.0.100-preview.6.25358.103\Microsoft.Common.CurrentVersion.targets(2438,5): warning MSB3277:
-      Found conflicts between different versions of "Microsoft.EntityFrameworkCore.Relational" that could not be resolved.
-      There was a conflict between "Microsoft.EntityFrameworkCore.Relational, Version=9.0.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" and "Microsoft.EntityFrameworkCore.Relational, Version=9.0.8.0,
-      Culture=neutral, PublicKeyToken=adb9793829ddae60".
-          "Microsoft.EntityFrameworkCore.Relational, Version=9.0.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" was chosen because it was primary and "Microsoft.EntityFrameworkCore.Relational, Version=
-      9.0.8.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" was not.
-          References which depend on "Microsoft.EntityFrameworkCore.Relational, Version=9.0.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" [C:\Users\kushal\.nuget\packages\microsoft.entityframeworkcore
-      .relational\9.0.1\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll].
-              C:\Users\kushal\.nuget\packages\microsoft.entityframeworkcore.relational\9.0.1\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll
-                Project file item includes which caused reference "C:\Users\kushal\.nuget\packages\microsoft.entityframeworkcore.relational\9.0.1\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll".
-                  C:\Users\kushal\.nuget\packages\microsoft.entityframeworkcore.relational\9.0.1\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll
-          References which depend on or have been unified to "Microsoft.EntityFrameworkCore.Relational, Version=9.0.8.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" [].
-              C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Infrastructure\bin\Debug\net9.0\MyOpenTelemetryApi.Infrastructure.dll
-                Project file item includes which caused reference "C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Infrastructure\bin\Debug\net9.0\MyOpenTelemetryApi.Infrastructure.dll".
-                  C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Infrastructure\bin\Debug\net9.0\MyOpenTelemetryApi.Infrastructure.dll
-  MyOpenTelemetryApi.Api succeeded (4.1s) → src\MyOpenTelemetryApi.Api\bin\Debug\net9.0\MyOpenTelemetryApi.Api.dll
-  MyOpenTelemetryApi.Api.Tests succeeded with 1 warning(s) (1.7s) → tests\MyOpenTelemetryApi.Api.Tests\bin\Debug\net9.0\MyOpenTelemetryApi.Api.Tests.dll
-    C:\Program Files\dotnet\sdk\10.0.100-preview.6.25358.103\Microsoft.Common.CurrentVersion.targets(2438,5): warning MSB3277:
-      Found conflicts between different versions of "Microsoft.EntityFrameworkCore.Relational" that could not be resolved.
-      There was a conflict between "Microsoft.EntityFrameworkCore.Relational, Version=9.0.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" and "Microsoft.EntityFrameworkCore.Relational, Version=9.0.8.0,
-      Culture=neutral, PublicKeyToken=adb9793829ddae60".
-          "Microsoft.EntityFrameworkCore.Relational, Version=9.0.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" was chosen because it was primary and "Microsoft.EntityFrameworkCore.Relational, Version=
-      9.0.8.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" was not.
-          References which depend on "Microsoft.EntityFrameworkCore.Relational, Version=9.0.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" [C:\Users\kushal\.nuget\packages\microsoft.entityframeworkcore
-      .relational\9.0.1\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll].
-              C:\Users\kushal\.nuget\packages\microsoft.entityframeworkcore.relational\9.0.1\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll
-                Project file item includes which caused reference "C:\Users\kushal\.nuget\packages\microsoft.entityframeworkcore.relational\9.0.1\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll".
-                  C:\Users\kushal\.nuget\packages\microsoft.entityframeworkcore.relational\9.0.1\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll
-          References which depend on or have been unified to "Microsoft.EntityFrameworkCore.Relational, Version=9.0.8.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" [].
-              C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Api\bin\Debug\net9.0\MyOpenTelemetryApi.Api.dll
-                Project file item includes which caused reference "C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Api\bin\Debug\net9.0\MyOpenTelemetryApi.Api.dll".
-                  C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Api\bin\Debug\net9.0\MyOpenTelemetryApi.Api.dll
-              C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Infrastructure\bin\Debug\net9.0\MyOpenTelemetryApi.Infrastructure.dll
-                Project file item includes which caused reference "C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Infrastructure\bin\Debug\net9.0\MyOpenTelemetryApi.Infrastructure.dll".
-                  C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Infrastructure\bin\Debug\net9.0\MyOpenTelemetryApi.Infrastructure.dll
-                  C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Api\bin\Debug\net9.0\MyOpenTelemetryApi.Api.dll
+[![NuGet version badge](https://img.shields.io/nuget/v/OpenTelemetry.Instrumentation.EntityFrameworkCore)](https://www.nuget.org/packages/OpenTelemetry.Instrumentation.EntityFrameworkCore)
+[![NuGet download count badge](https://img.shields.io/nuget/dt/OpenTelemetry.Instrumentation.EntityFrameworkCore)](https://www.nuget.org/packages/OpenTelemetry.Instrumentation.EntityFrameworkCore)
+[![codecov.io](https://codecov.io/gh/open-telemetry/opentelemetry-dotnet-contrib/branch/main/graphs/badge.svg?flag=unittests-Instrumentation.EntityFrameworkCore)](https://app.codecov.io/gh/open-telemetry/opentelemetry-dotnet-contrib?flags[0]=unittests-Instrumentation.EntityFrameworkCore)
 
-Build succeeded with 2 warning(s) in 9.7s
-2025-08-05 06:01:07
-Restore complete (2.1s)
-You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy
-  MyOpenTelemetryApi.Domain succeeded (0.2s) → src\MyOpenTelemetryApi.Domain\bin\Debug\net9.0\MyOpenTelemetryApi.Domain.dll
-  MyOpenTelemetryApi.Infrastructure succeeded (0.3s) → src\MyOpenTelemetryApi.Infrastructure\bin\Debug\net9.0\MyOpenTelemetryApi.Infrastructure.dll
-  MyOpenTelemetryApi.Application succeeded (0.3s) → src\MyOpenTelemetryApi.Application\bin\Debug\net9.0\MyOpenTelemetryApi.Application.dll
-  MyOpenTelemetryApi.Application.Tests succeeded (0.4s) → tests\MyOpenTelemetryApi.Application.Tests\bin\Debug\net9.0\MyOpenTelemetryApi.Application.Tests.dll
-  MyOpenTelemetryApi.Infrastructure.Tests succeeded with 1 warning(s) (0.4s) → tests\MyOpenTelemetryApi.Infrastructure.Tests\bin\Debug\net9.0\MyOpenTelemetryApi.Infrastructure.Tests.dll
-    C:\Program Files\dotnet\sdk\10.0.100-preview.6.25358.103\Microsoft.Common.CurrentVersion.targets(2438,5): warning MSB3277:
-      Found conflicts between different versions of "Microsoft.EntityFrameworkCore.Relational" that could not be resolved.
-      There was a conflict between "Microsoft.EntityFrameworkCore.Relational, Version=9.0.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" and "Microsoft.EntityFrameworkCore.Relational, Version=9.0.8.0,
-      Culture=neutral, PublicKeyToken=adb9793829ddae60".
-          "Microsoft.EntityFrameworkCore.Relational, Version=9.0.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" was chosen because it was primary and "Microsoft.EntityFrameworkCore.Relational, Version=
-      9.0.8.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" was not.
-          References which depend on "Microsoft.EntityFrameworkCore.Relational, Version=9.0.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" [C:\Users\kushal\.nuget\packages\microsoft.entityframeworkcore
-      .relational\9.0.1\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll].
-              C:\Users\kushal\.nuget\packages\microsoft.entityframeworkcore.relational\9.0.1\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll
-                Project file item includes which caused reference "C:\Users\kushal\.nuget\packages\microsoft.entityframeworkcore.relational\9.0.1\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll".
-                  C:\Users\kushal\.nuget\packages\microsoft.entityframeworkcore.relational\9.0.1\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll
-          References which depend on or have been unified to "Microsoft.EntityFrameworkCore.Relational, Version=9.0.8.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" [].
-              C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Infrastructure\bin\Debug\net9.0\MyOpenTelemetryApi.Infrastructure.dll
-                Project file item includes which caused reference "C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Infrastructure\bin\Debug\net9.0\MyOpenTelemetryApi.Infrastructure.dll".
-                  C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Infrastructure\bin\Debug\net9.0\MyOpenTelemetryApi.Infrastructure.dll
-  MyOpenTelemetryApi.Api succeeded (1.4s) → src\MyOpenTelemetryApi.Api\bin\Debug\net9.0\MyOpenTelemetryApi.Api.dll
-  MyOpenTelemetryApi.Api.Tests succeeded with 1 warning(s) (0.3s) → tests\MyOpenTelemetryApi.Api.Tests\bin\Debug\net9.0\MyOpenTelemetryApi.Api.Tests.dll
-    C:\Program Files\dotnet\sdk\10.0.100-preview.6.25358.103\Microsoft.Common.CurrentVersion.targets(2438,5): warning MSB3277:
-      Found conflicts between different versions of "Microsoft.EntityFrameworkCore.Relational" that could not be resolved.
-      There was a conflict between "Microsoft.EntityFrameworkCore.Relational, Version=9.0.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" and "Microsoft.EntityFrameworkCore.Relational, Version=9.0.8.0,
-      Culture=neutral, PublicKeyToken=adb9793829ddae60".
-          "Microsoft.EntityFrameworkCore.Relational, Version=9.0.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" was chosen because it was primary and "Microsoft.EntityFrameworkCore.Relational, Version=
-      9.0.8.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" was not.
-          References which depend on "Microsoft.EntityFrameworkCore.Relational, Version=9.0.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" [C:\Users\kushal\.nuget\packages\microsoft.entityframeworkcore
-      .relational\9.0.1\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll].
-              C:\Users\kushal\.nuget\packages\microsoft.entityframeworkcore.relational\9.0.1\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll
-                Project file item includes which caused reference "C:\Users\kushal\.nuget\packages\microsoft.entityframeworkcore.relational\9.0.1\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll".
-                  C:\Users\kushal\.nuget\packages\microsoft.entityframeworkcore.relational\9.0.1\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll
-          References which depend on or have been unified to "Microsoft.EntityFrameworkCore.Relational, Version=9.0.8.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" [].
-              C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Api\bin\Debug\net9.0\MyOpenTelemetryApi.Api.dll
-                Project file item includes which caused reference "C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Api\bin\Debug\net9.0\MyOpenTelemetryApi.Api.dll".
-                  C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Api\bin\Debug\net9.0\MyOpenTelemetryApi.Api.dll
-              C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Infrastructure\bin\Debug\net9.0\MyOpenTelemetryApi.Infrastructure.dll
-                Project file item includes which caused reference "C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Infrastructure\bin\Debug\net9.0\MyOpenTelemetryApi.Infrastructure.dll".
-                  C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Infrastructure\bin\Debug\net9.0\MyOpenTelemetryApi.Infrastructure.dll
-                  C:\code\MyOpenTelemetryApi\src\MyOpenTelemetryApi.Api\bin\Debug\net9.0\MyOpenTelemetryApi.Api.dll
-[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.3+b1b99bdeb3 (64-bit .NET 9.0.8)
-[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.3+b1b99bdeb3 (64-bit .NET 9.0.8)
-[xUnit.net 00:00:00.93]   Discovering: MyOpenTelemetryApi.Application.Tests
-[xUnit.net 00:00:00.97]   Discovering: MyOpenTelemetryApi.Infrastructure.Tests
-[xUnit.net 00:00:01.10]   Discovered:  MyOpenTelemetryApi.Infrastructure.Tests
-[xUnit.net 00:00:01.13]   Discovered:  MyOpenTelemetryApi.Application.Tests
-[xUnit.net 00:00:01.17]   Starting:    MyOpenTelemetryApi.Infrastructure.Tests
-[xUnit.net 00:00:01.22]   Starting:    MyOpenTelemetryApi.Application.Tests
-[xUnit.net 00:00:01.74]   Finished:    MyOpenTelemetryApi.Infrastructure.Tests
-[xUnit.net 00:00:01.80]   Finished:    MyOpenTelemetryApi.Application.Tests
-  MyOpenTelemetryApi.Infrastructure.Tests test succeeded (4.5s)
-  MyOpenTelemetryApi.Application.Tests test succeeded (4.6s)
-[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.3+b1b99bdeb3 (64-bit .NET 9.0.8)
-[xUnit.net 00:00:00.79]   Discovering: MyOpenTelemetryApi.Api.Tests
-[xUnit.net 00:00:00.89]   Discovered:  MyOpenTelemetryApi.Api.Tests
-[xUnit.net 00:00:00.95]   Starting:    MyOpenTelemetryApi.Api.Tests
-[xUnit.net 00:00:01.49]   Finished:    MyOpenTelemetryApi.Api.Tests
-  MyOpenTelemetryApi.Api.Tests test succeeded (4.3s)
+This is an [Instrumentation
+Library](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/glossary.md#instrumentation-library),
+which instruments
+[Microsoft.EntityFrameworkCore](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore)
+and collects traces about outgoing requests.
 
-Test summary: total: 44, failed: 0, succeeded: 44, skipped: 0, duration: 6.3s
-Build succeeded with 2 warning(s) in 9.7s
-2025-08-05 06:01:17
-On branch main
-Your branch is ahead of 'origin/main' by 3 commits.
-  (use "git push" to publish your local commits)
+**Note: This component is based on the OpenTelemetry semantic conventions for
+[metrics](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/database/database-metrics.md)
+and
+[traces](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/database/database-spans.md).
+These conventions are
+[Experimental](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/document-status.md),
+and hence, this package is a
+[pre-release](https://github.com/open-telemetry/opentelemetry-dotnet/blob/main/VERSIONING.md#pre-releases).
+Until a [stable
+version](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/telemetry-stability.md)
+is released, there can be [breaking changes](./CHANGELOG.md).**
 
-Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git restore <file>..." to discard changes in working directory)
-        modified:   src/MyOpenTelemetryApi.Api/appsettings.json
+## Steps to enable OpenTelemetry.Instrumentation.EntityFrameworkCore
 
-no changes added to commit (use "git add" and/or "git commit -a")
-2025-08-05 06:01:17
-* remote origin
-  Fetch URL: git@github.com:kusl/MyOpenTelemetryApi.git
-  Push  URL: git@github.com:kusl/MyOpenTelemetryApi.git
-  HEAD branch: main
-  Remote branches:
-    dependabot/github_actions/codecov/codecov-action-5                         new (next fetch will store in remotes/origin)
-    dependabot/github_actions/danielpalme/ReportGenerator-GitHub-Action-5.4.11 new (next fetch will store in remotes/origin)
-    dependabot/nuget/src/MyOpenTelemetryApi.Api/microsoft-packages-25694566e4  new (next fetch will store in remotes/origin)
-    main                                                                       tracked
-  Local branch configured for 'git pull':
-    main merges with remote main
-  Local ref configured for 'git push':
-    main pushes to main (fast-forwardable)
-2025-08-05 06:01:18
-PS C:\code\MyOpenTelemetryApi>
+### Step 1: Install Package
+
+Add a reference to the
+[`OpenTelemetry.Instrumentation.EntityFrameworkCore`](https://www.nuget.org/packages/OpenTelemetry.Instrumentation.EntityFrameworkCore)
+package. Also, add any other instrumentations & exporters you will need.
+
+```shell
+dotnet add package --prerelease OpenTelemetry.Instrumentation.EntityFrameworkCore
+```
+
+### Step 2: Enable EntityFrameworkCore Instrumentation at application startup
+
+`EntityFrameworkCore` instrumentation must be enabled at application startup.
+
+The following example demonstrates adding `EntityFrameworkCore`
+instrumentation to a console application. This example also sets up the
+OpenTelemetry Console exporter, which requires adding the package
+[`OpenTelemetry.Exporter.Console`](https://github.com/open-telemetry/opentelemetry-dotnet/blob/main/src/OpenTelemetry.Exporter.Console/README.md)
+to the application.
+
+```csharp
+using OpenTelemetry;
+using OpenTelemetry.Trace;
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        using var tracerProvider = Sdk.CreateTracerProviderBuilder()
+            .AddEntityFrameworkCoreInstrumentation()
+            .AddConsoleExporter()
+            .Build();
+    }
+}
+```
+
+For an ASP.NET Core application, adding instrumentation is typically done in
+the `ConfigureServices` of your `Startup` class. Refer to documentation for
+[OpenTelemetry.Instrumentation.AspNetCore](../OpenTelemetry.Instrumentation.AspNetCore/README.md).
+
+For an ASP.NET application, adding instrumentation is typically done in the
+`Global.asax.cs`. Refer to the documentation for
+[OpenTelemetry.Instrumentation.AspNet](../OpenTelemetry.Instrumentation.AspNet/README.md).
+
+## Advanced configuration
+
+This instrumentation can be configured to change the default behavior by using
+`EntityFrameworkInstrumentationOptions`.
+
+```csharp
+services.AddOpenTelemetry()
+    .WithTracing(builder => builder
+        .AddEntityFrameworkCoreInstrumentation(options =>
+        {
+            options.EnrichWithIDbCommand = (activity, command) =>
+            {
+                var stateDisplayName = $"{command.CommandType} main";
+                activity.DisplayName = stateDisplayName;
+                activity.SetTag("db.name", stateDisplayName);
+            };
+        })
+        .AddConsoleExporter());
+```
+
+When used with
+[`OpenTelemetry.Extensions.Hosting`](https://github.com/open-telemetry/opentelemetry-dotnet/blob/main/src/OpenTelemetry.Extensions.Hosting/README.md),
+all configurations to `EntityFrameworkInstrumentationOptions`
+can be done in the `ConfigureServices` method of you applications `Startup`
+class as shown below.
+
+```csharp
+// Configure
+services.Configure<EntityFrameworkInstrumentationOptions>(options =>
+{
+    options.EnrichWithIDbCommand = (activity, command) =>
+    {
+        var stateDisplayName = $"{command.CommandType} main";
+        activity.DisplayName = stateDisplayName;
+        activity.SetTag("db.name", stateDisplayName);
+    };
+});
+
+services.AddOpenTelemetry()
+    .WithTracing(builder => builder
+        .AddEntityFrameworkCoreInstrumentation()
+        .AddConsoleExporter());
+```
+
+### Filter
+
+This option can be used to filter out activities based on the provider name and
+the properties of the db command object being instrumented
+using a `Func<string, IDbCommand, bool>`. The function receives a provider name
+and an instance of the db command and should return `true`
+if the telemetry is to be collected, and `false` if it should not.
+
+The following code snippet shows how to use `Filter` to collect traces
+for stored procedures only.
+
+```csharp
+services.AddOpenTelemetry()
+    .WithTracing(builder => builder
+        .AddEntityFrameworkCoreInstrumentation(options =>
+        {
+            options.Filter = (providerName, command) =>
+            {
+                return command.CommandType == CommandType.StoredProcedure;
+            };
+        })
+        .AddConsoleExporter());
+```
+
+## References
+
+* [OpenTelemetry Project](https://opentelemetry.io/)
+
+from https://github.com/open-telemetry/opentelemetry-dotnet-contrib/blob/main/src/OpenTelemetry.Instrumentation.EntityFrameworkCore/README.md 
 
 
 
 
 
 
-The warnings about `Microsoft.EntityFrameworkCore.Relational` version conflicts mean that different packages in your project are referencing different versions of this dependency:
 
-- Some packages want version **9.0.1**
-- Your projects are using version **9.0.8**
-
-This happens because:
-1. The OpenTelemetry EF Core instrumentation package (`OpenTelemetry.Instrumentation.EntityFrameworkCore`) is still in beta and references an older version
-2. Your main projects have newer versions
-
-To fix this, you need to align all Entity Framework Core packages to the same version. Here's how:
-
-**Option 1: Force all packages to use the same version (Recommended)**
-
-Add explicit package references to your `.csproj` files to override the transitive dependencies:
+Claude: 
+You're absolutely right! Since the OpenTelemetry EF Core instrumentation is experimental/beta anyway, there's no reason to hold back on using the latest EF Core versions. Let's update the OpenTelemetry EF Core instrumentation package to see if there's a newer version that supports EF Core 9.0.8:
 
 ```powershell
-# Update Infrastructure project
-cd src/MyOpenTelemetryApi.Infrastructure
-dotnet add package Microsoft.EntityFrameworkCore --version 9.0.0
+# Check for the latest version of the OpenTelemetry EF Core instrumentation
+cd src/MyOpenTelemetryApi.Api
+dotnet list package OpenTelemetry.Instrumentation.EntityFrameworkCore --include-prerelease --source https://api.nuget.org/v3/index.json
+```
+
+If there's no newer version available, we can simply let the version conflict exist since it's working fine. The warning is just informing us about the mismatch, but the runtime binding redirect handles it.
+
+However, if you want to clean up the warnings, you can add a `PackageReference` to force the version resolution. Add this to your `src/MyOpenTelemetryApi.Api/MyOpenTelemetryApi.Api.csproj`:
+
+```xml
+<ItemGroup>
+  <!-- Force EF Core Relational to latest version to resolve conflicts -->
+  <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.0" />
+</ItemGroup>
+```
+
+Or run:
+```powershell
+cd src/MyOpenTelemetryApi.Api
 dotnet add package Microsoft.EntityFrameworkCore.Relational --version 9.0.0
-dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL --version 9.0.0
-
-# Update API project  
-cd ../MyOpenTelemetryApi.Api
-dotnet add package Microsoft.EntityFrameworkCore.Design --version 9.0.0
-
 cd ../..
 ```
 
-**Option 2: Use a Directory.Build.props file to centralize versions**
+This explicitly tells the build system which version to use and should eliminate the warnings. Since both packages are in preview/beta state, using the latest versions together is perfectly reasonable.
 
-Create a `Directory.Build.props` file in your solution root:
-
-```xml
-<Project>
-  <PropertyGroup>
-    <EFCoreVersion>9.0.0</EFCoreVersion>
-  </PropertyGroup>
-  
-  <ItemGroup>
-    <PackageReference Update="Microsoft.EntityFrameworkCore" Version="$(EFCoreVersion)" />
-    <PackageReference Update="Microsoft.EntityFrameworkCore.Design" Version="$(EFCoreVersion)" />
-    <PackageReference Update="Microsoft.EntityFrameworkCore.Relational" Version="$(EFCoreVersion)" />
-    <PackageReference Update="Npgsql.EntityFrameworkCore.PostgreSQL" Version="$(EFCoreVersion)" />
-  </ItemGroup>
-</Project>
-```
-
-**Option 3: Update the OpenTelemetry instrumentation package**
-
-Check if there's a newer version that supports EF Core 9.0.8:
-
-```powershell
-cd src/MyOpenTelemetryApi.Api
-dotnet list package --outdated --include-prerelease
-```
-
-The warnings don't prevent your app from running, but they indicate potential compatibility issues. The build chooses version 9.0.1 to be safe, which might mean you're not getting bug fixes from newer versions.
-
-Also, I notice you have uncommitted changes to `appsettings.json` - that's likely your connection string placeholder change that needs to be committed.
+The fact that OpenTelemetry EF Core instrumentation is experimental actually gives us more freedom to use newer versions since we're already accepting that things might change!
