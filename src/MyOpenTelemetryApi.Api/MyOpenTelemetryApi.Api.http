@@ -1,6 +1,331 @@
-@MyOpenTelemetryApi.Api_HostAddress = http://localhost:5174
+# MyOpenTelemetryApi.http
+# HTTP requests for testing the Personal Information Manager API
 
-GET {{MyOpenTelemetryApi.Api_HostAddress}}/weatherforecast/
-Accept: application/json
+@host = https://localhost:5001
+@contentType = application/json
+
+### Variables for testing
+@contactId = {{createContact.response.body.id}}
+@groupId = {{createGroup.response.body.id}}
+@tagId = {{createTag.response.body.id}}
+
+################################################
+# HEALTH ENDPOINTS
+################################################
+
+### Health Check
+GET {{host}}/api/health
+Accept: {{contentType}}
+
+###
+
+### Readiness Check
+GET {{host}}/api/health/ready
+Accept: {{contentType}}
+
+###
+
+################################################
+# TAG ENDPOINTS
+################################################
+
+### Get All Tags
+GET {{host}}/api/tags
+Accept: {{contentType}}
+
+###
+
+### Create Tag
+# @name createTag
+POST {{host}}/api/tags
+Content-Type: {{contentType}}
+
+{
+  "name": "VIP",
+  "colorHex": "#FF0000"
+}
+
+###
+
+### Create Another Tag
+POST {{host}}/api/tags
+Content-Type: {{contentType}}
+
+{
+  "name": "Friend",
+  "colorHex": "#00FF00"
+}
+
+###
+
+### Get Tag by ID
+GET {{host}}/api/tags/{{tagId}}
+Accept: {{contentType}}
+
+###
+
+### Update Tag
+PUT {{host}}/api/tags/{{tagId}}
+Content-Type: {{contentType}}
+
+{
+  "name": "Very Important",
+  "colorHex": "#FF00FF"
+}
+
+###
+
+### Delete Tag
+DELETE {{host}}/api/tags/{{tagId}}
+
+###
+
+################################################
+# GROUP ENDPOINTS
+################################################
+
+### Get All Groups
+GET {{host}}/api/groups
+Accept: {{contentType}}
+
+###
+
+### Create Group
+# @name createGroup
+POST {{host}}/api/groups
+Content-Type: {{contentType}}
+
+{
+  "name": "Family",
+  "description": "Family members and close relatives"
+}
+
+###
+
+### Create Another Group
+POST {{host}}/api/groups
+Content-Type: {{contentType}}
+
+{
+  "name": "Work",
+  "description": "Professional contacts and colleagues"
+}
+
+###
+
+### Get Group by ID
+GET {{host}}/api/groups/{{groupId}}
+Accept: {{contentType}}
+
+###
+
+### Update Group
+PUT {{host}}/api/groups/{{groupId}}
+Content-Type: {{contentType}}
+
+{
+  "name": "Extended Family",
+  "description": "All family members including extended family"
+}
+
+###
+
+### Delete Group
+DELETE {{host}}/api/groups/{{groupId}}
+
+###
+
+################################################
+# CONTACT ENDPOINTS
+################################################
+
+### Get Paginated Contacts (Default pagination)
+GET {{host}}/api/contacts
+Accept: {{contentType}}
+
+###
+
+### Get Paginated Contacts (Custom pagination)
+GET {{host}}/api/contacts?pageNumber=1&pageSize=10
+Accept: {{contentType}}
+
+###
+
+### Create Contact with Full Details
+# @name createContact
+POST {{host}}/api/contacts
+Content-Type: {{contentType}}
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "middleName": "Michael",
+  "nickname": "Johnny",
+  "company": "Acme Corporation",
+  "jobTitle": "Software Engineer",
+  "dateOfBirth": "1990-05-15T00:00:00Z",
+  "notes": "Met at tech conference 2023",
+  "emailAddresses": [
+    {
+      "email": "john.doe@acme.com",
+      "type": "Work",
+      "isPrimary": true
+    },
+    {
+      "email": "johndoe@personal.com",
+      "type": "Personal",
+      "isPrimary": false
+    }
+  ],
+  "phoneNumbers": [
+    {
+      "number": "+1-555-123-4567",
+      "type": "Mobile",
+      "isPrimary": true
+    },
+    {
+      "number": "+1-555-987-6543",
+      "type": "Work",
+      "isPrimary": false
+    }
+  ],
+  "addresses": [
+    {
+      "streetLine1": "123 Main Street",
+      "streetLine2": "Suite 400",
+      "city": "Springfield",
+      "stateProvince": "IL",
+      "postalCode": "62701",
+      "country": "USA",
+      "type": "Work",
+      "isPrimary": true
+    }
+  ],
+  "groupIds": [],
+  "tagIds": []
+}
+
+###
+
+### Create Simple Contact
+POST {{host}}/api/contacts
+Content-Type: {{contentType}}
+
+{
+  "firstName": "Jane",
+  "lastName": "Smith",
+  "emailAddresses": [
+    {
+      "email": "jane.smith@example.com",
+      "type": "Personal",
+      "isPrimary": true
+    }
+  ],
+  "phoneNumbers": [],
+  "addresses": [],
+  "groupIds": [],
+  "tagIds": []
+}
+
+###
+
+### Get Contact by ID (with full details)
+GET {{host}}/api/contacts/{{contactId}}
+Accept: {{contentType}}
+
+###
+
+### Update Contact
+PUT {{host}}/api/contacts/{{contactId}}
+Content-Type: {{contentType}}
+
+{
+  "firstName": "John",
+  "lastName": "Doe-Smith",
+  "middleName": "Michael",
+  "nickname": "JD",
+  "company": "New Company Inc",
+  "jobTitle": "Senior Software Engineer",
+  "dateOfBirth": "1990-05-15T00:00:00Z",
+  "notes": "Updated contact information after job change"
+}
+
+###
+
+### Search Contacts
+GET {{host}}/api/contacts/search?q=john
+Accept: {{contentType}}
+
+###
+
+### Search Contacts by Email
+GET {{host}}/api/contacts/search?q=@acme.com
+Accept: {{contentType}}
+
+###
+
+### Search Contacts by Phone
+GET {{host}}/api/contacts/search?q=555
+Accept: {{contentType}}
+
+###
+
+### Get Contacts by Group
+GET {{host}}/api/contacts/group/{{groupId}}
+Accept: {{contentType}}
+
+###
+
+### Get Contacts by Tag
+GET {{host}}/api/contacts/tag/{{tagId}}
+Accept: {{contentType}}
+
+###
+
+### Delete Contact
+DELETE {{host}}/api/contacts/{{contactId}}
+
+###
+
+################################################
+# ERROR SCENARIOS
+################################################
+
+### Get Non-existent Contact
+GET {{host}}/api/contacts/00000000-0000-0000-0000-000000000000
+Accept: {{contentType}}
+
+###
+
+### Create Contact with Missing Required Fields
+POST {{host}}/api/contacts
+Content-Type: {{contentType}}
+
+{
+  "middleName": "Test"
+}
+
+###
+
+### Create Duplicate Tag
+POST {{host}}/api/tags
+Content-Type: {{contentType}}
+
+{
+  "name": "VIP",
+  "colorHex": "#0000FF"
+}
+
+###
+
+### Invalid Pagination
+GET {{host}}/api/contacts?pageNumber=0&pageSize=200
+Accept: {{contentType}}
+
+###
+
+### Search with Empty Query
+GET {{host}}/api/contacts/search?q=
+Accept: {{contentType}}
 
 ###
