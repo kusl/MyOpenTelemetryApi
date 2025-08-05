@@ -9,12 +9,12 @@ namespace MyOpenTelemetryApi.Api.Telemetry;
 public static class TelemetryExtensions
 {
     public static OpenTelemetryLoggerOptions AddFileExporter(
-        this OpenTelemetryLoggerOptions options,
+        this OpenTelemetryLoggerOptions options, 
         string filePath)
     {
         return options.AddProcessor(new SimpleLogRecordExportProcessor(new FileLogExporter(filePath)));
     }
-
+    
     public static TracerProviderBuilder AddFileExporter(
         this TracerProviderBuilder builder,
         IConfiguration configuration)
@@ -22,12 +22,12 @@ public static class TelemetryExtensions
         var enabled = configuration.GetValue<bool>("OpenTelemetry:Exporter:File:Enabled");
         if (enabled)
         {
-            var tracePath = configuration.GetValue<string>("OpenTelemetry:Exporter:File:TracePath")
+            var tracePath = configuration.GetValue<string>("OpenTelemetry:Exporter:File:TracePath") 
                            ?? "logs/otel-traces.json";
             // For traces, we'd implement a similar FileTraceExporter
             // For now, we'll use console exporter as file trace export is complex
         }
-
+        
         return builder;
     }
 }

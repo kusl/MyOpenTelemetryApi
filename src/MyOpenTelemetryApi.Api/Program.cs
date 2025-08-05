@@ -1,3 +1,4 @@
+
 // src/MyOpenTelemetryApi.Api/Program.cs - Updated version with configuration-based setup
 using Microsoft.EntityFrameworkCore;
 using MyOpenTelemetryApi.Application.Services;
@@ -17,7 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Define service name and version for OpenTelemetry
 var serviceName = builder.Configuration.GetValue<string>("OpenTelemetry:ServiceName") ?? "MyOpenTelemetryApi";
-var serviceVersion = builder.Configuration.GetValue<string>("OpenTelemetry:ServiceVersion") ??
+var serviceVersion = builder.Configuration.GetValue<string>("OpenTelemetry:ServiceVersion") ?? 
                     Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "1.0.0";
 
 // Configure OpenTelemetry Resource
@@ -38,27 +39,27 @@ builder.Logging.AddOpenTelemetry(options =>
     options.SetResourceBuilder(resourceBuilder);
     options.IncludeFormattedMessage = true;
     options.IncludeScopes = true;
-
+    
     // Console exporter
     if (builder.Configuration.GetValue<bool>("OpenTelemetry:Exporter:Console:Enabled"))
     {
         options.AddConsoleExporter();
     }
-
+    
     // File exporter
     if (builder.Configuration.GetValue<bool>("OpenTelemetry:Exporter:File:Enabled"))
     {
-        var logPath = builder.Configuration.GetValue<string>("OpenTelemetry:Exporter:File:LogPath")
+        var logPath = builder.Configuration.GetValue<string>("OpenTelemetry:Exporter:File:LogPath") 
                      ?? "logs/otel-logs.json";
         options.AddFileExporter(logPath);
     }
-
+    
     // OTLP exporter
     if (builder.Configuration.GetValue<bool>("OpenTelemetry:Exporter:OTLP:Enabled"))
     {
         options.AddOtlpExporter(otlpOptions =>
         {
-            otlpOptions.Endpoint = new Uri(builder.Configuration.GetValue<string>("OpenTelemetry:Exporter:OTLP:Endpoint")
+            otlpOptions.Endpoint = new Uri(builder.Configuration.GetValue<string>("OpenTelemetry:Exporter:OTLP:Endpoint") 
                                           ?? "http://localhost:4317");
             var protocol = builder.Configuration.GetValue<string>("OpenTelemetry:Exporter:OTLP:Protocol") ?? "Grpc";
             otlpOptions.Protocol = protocol == "Grpc" ? OtlpExportProtocol.Grpc : OtlpExportProtocol.HttpProtobuf;
@@ -87,7 +88,7 @@ builder.Services.AddOpenTelemetry()
                 options.SetDbStatementForStoredProcedure = true;
             })
             .AddSource("MyOpenTelemetryApi.*"); // Add custom activity sources
-
+            
         // Configure sampling
         var alwaysOn = builder.Configuration.GetValue<bool>("OpenTelemetry:Sampling:AlwaysOn");
         if (alwaysOn)
@@ -99,18 +100,18 @@ builder.Services.AddOpenTelemetry()
             var ratio = builder.Configuration.GetValue<double>("OpenTelemetry:Sampling:Ratio");
             tracing.SetSampler(new TraceIdRatioBasedSampler(ratio));
         }
-
+        
         // Configure exporters
         if (builder.Configuration.GetValue<bool>("OpenTelemetry:Exporter:Console:Enabled"))
         {
             tracing.AddConsoleExporter();
         }
-
+        
         if (builder.Configuration.GetValue<bool>("OpenTelemetry:Exporter:OTLP:Enabled"))
         {
             tracing.AddOtlpExporter(options =>
             {
-                options.Endpoint = new Uri(builder.Configuration.GetValue<string>("OpenTelemetry:Exporter:OTLP:Endpoint")
+                options.Endpoint = new Uri(builder.Configuration.GetValue<string>("OpenTelemetry:Exporter:OTLP:Endpoint") 
                                           ?? "http://localhost:4317");
                 var protocol = builder.Configuration.GetValue<string>("OpenTelemetry:Exporter:OTLP:Protocol") ?? "Grpc";
                 options.Protocol = protocol == "Grpc" ? OtlpExportProtocol.Grpc : OtlpExportProtocol.HttpProtobuf;
@@ -125,18 +126,18 @@ builder.Services.AddOpenTelemetry()
             .AddRuntimeInstrumentation()
             .AddProcessInstrumentation()
             .AddMeter("MyOpenTelemetryApi.*"); // Add custom meters
-
+            
         // Configure exporters
         if (builder.Configuration.GetValue<bool>("OpenTelemetry:Exporter:Console:Enabled"))
         {
             metrics.AddConsoleExporter();
         }
-
+        
         if (builder.Configuration.GetValue<bool>("OpenTelemetry:Exporter:OTLP:Enabled"))
         {
             metrics.AddOtlpExporter(options =>
             {
-                options.Endpoint = new Uri(builder.Configuration.GetValue<string>("OpenTelemetry:Exporter:OTLP:Endpoint")
+                options.Endpoint = new Uri(builder.Configuration.GetValue<string>("OpenTelemetry:Exporter:OTLP:Endpoint") 
                                           ?? "http://localhost:4317");
                 var protocol = builder.Configuration.GetValue<string>("OpenTelemetry:Exporter:OTLP:Protocol") ?? "Grpc";
                 options.Protocol = protocol == "Grpc" ? OtlpExportProtocol.Grpc : OtlpExportProtocol.HttpProtobuf;
@@ -180,9 +181,9 @@ app.Use(async (context, next) =>
         activity.SetTag("user.agent", context.Request.Headers.UserAgent.ToString());
         activity.SetTag("client.ip", context.Connection.RemoteIpAddress?.ToString());
     }
-
+    
     await next();
-
+    
     if (activity != null)
     {
         activity.SetTag("http.response.body.size", context.Response.ContentLength ?? 0);
@@ -200,7 +201,7 @@ if (app.Environment.IsDevelopment())
     {
         var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-
+        
         using var activity = Activity.Current?.Source.StartActivity("DatabaseMigration");
         try
         {

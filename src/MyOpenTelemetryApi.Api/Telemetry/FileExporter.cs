@@ -14,12 +14,12 @@ public class FileLogExporter : BaseExporter<LogRecord>
     public FileLogExporter(string filePath)
     {
         _filePath = filePath;
-        _jsonOptions = new JsonSerializerOptions
-        {
+        _jsonOptions = new JsonSerializerOptions 
+        { 
             WriteIndented = false,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
-
+        
         // Ensure directory exists
         var directory = Path.GetDirectoryName(_filePath);
         if (!string.IsNullOrEmpty(directory))
@@ -35,7 +35,7 @@ public class FileLogExporter : BaseExporter<LogRecord>
             lock (_lockObject)
             {
                 using var writer = new StreamWriter(_filePath, append: true);
-
+                
                 foreach (var logRecord in batch)
                 {
                     var logEntry = new
@@ -46,19 +46,18 @@ public class FileLogExporter : BaseExporter<LogRecord>
                         TraceFlags = logRecord.TraceFlags.ToString(),
                         CategoryName = logRecord.CategoryName,
                         LogLevel = logRecord.LogLevel.ToString(),
-                        State = logRecord.State?.ToString(),
-                        StateValues = ExtractStateValues(logRecord),
                         FormattedMessage = logRecord.FormattedMessage,
+                        Body = logRecord.Body,
                         ScopeValues = ExtractScopeValues(logRecord),
                         Exception = logRecord.Exception?.ToString(),
                         Attributes = ExtractAttributes(logRecord)
                     };
-
+                    
                     var json = JsonSerializer.Serialize(logEntry, _jsonOptions);
                     writer.WriteLine(json);
                 }
             }
-
+            
             return ExportResult.Success;
         }
         catch (Exception ex)
@@ -68,40 +67,25 @@ public class FileLogExporter : BaseExporter<LogRecord>
         }
     }
 
-    private Dictionary<string, object?> ExtractStateValues(LogRecord logRecord)
-    {
-        var values = new Dictionary<string, object?>();
-
-        if (logRecord.StateValues != null)
-        {
-            foreach (var stateValue in logRecord.StateValues)
-            {
-                values[stateValue.Key] = stateValue.Value;
-            }
-        }
-
-        return values;
-    }
-
     private List<object> ExtractScopeValues(LogRecord logRecord)
     {
         var scopes = new List<object>();
-
+        
         logRecord.ForEachScope((scope, state) =>
         {
-            //if (scope != null)
-            //{
-            scopes.Add(scope.ToString() ?? "null");
-            //}
+            if (!scope.Equals(default(LogRecordScope)))
+            {
+                scopes.Add(scope.ToString() ?? "null");
+            }
         }, scopes);
-
+        
         return scopes;
     }
 
     private Dictionary<string, object?> ExtractAttributes(LogRecord logRecord)
     {
         var attributes = new Dictionary<string, object?>();
-
+        
         if (logRecord.Attributes != null)
         {
             foreach (var attribute in logRecord.Attributes)
@@ -109,7 +93,7 @@ public class FileLogExporter : BaseExporter<LogRecord>
                 attributes[attribute.Key] = attribute.Value;
             }
         }
-
+        
         return attributes;
     }
 }
