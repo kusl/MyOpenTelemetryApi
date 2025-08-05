@@ -1,7 +1,7 @@
 # MyOpenTelemetryApi.http
 # HTTP requests for testing the Personal Information Manager API
 
-@host = https://localhost:5001
+@host = https://localhost:7034
 @contentType = application/json
 
 ### Variables for testing
