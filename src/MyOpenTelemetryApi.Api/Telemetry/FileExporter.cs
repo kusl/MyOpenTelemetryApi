@@ -8,7 +8,7 @@ namespace MyOpenTelemetryApi.Api.Telemetry;
 public class FileLogExporter : BaseExporter<LogRecord>
 {
     private readonly string _filePath;
-    private readonly object _lockObject = new();
+    private readonly Lock _lockObject = new();
     private readonly JsonSerializerOptions _jsonOptions;
 
     public FileLogExporter(string filePath)
@@ -40,14 +40,14 @@ public class FileLogExporter : BaseExporter<LogRecord>
                 {
                     var logEntry = new
                     {
-                        Timestamp = logRecord.Timestamp,
+                        logRecord.Timestamp,
                         TraceId = logRecord.TraceId.ToString(),
                         SpanId = logRecord.SpanId.ToString(),
                         TraceFlags = logRecord.TraceFlags.ToString(),
-                        CategoryName = logRecord.CategoryName,
+                        logRecord.CategoryName,
                         LogLevel = logRecord.LogLevel.ToString(),
-                        FormattedMessage = logRecord.FormattedMessage,
-                        Body = logRecord.Body,
+                        logRecord.FormattedMessage,
+                        logRecord.Body,
                         ScopeValues = ExtractScopeValues(logRecord),
                         Exception = logRecord.Exception?.ToString(),
                         Attributes = ExtractAttributes(logRecord)
@@ -67,7 +67,7 @@ public class FileLogExporter : BaseExporter<LogRecord>
         }
     }
 
-    private List<object> ExtractScopeValues(LogRecord logRecord)
+    private static List<object> ExtractScopeValues(LogRecord logRecord)
     {
         var scopes = new List<object>();
         
@@ -82,7 +82,7 @@ public class FileLogExporter : BaseExporter<LogRecord>
         return scopes;
     }
 
-    private Dictionary<string, object?> ExtractAttributes(LogRecord logRecord)
+    private static Dictionary<string, object?> ExtractAttributes(LogRecord logRecord)
     {
         var attributes = new Dictionary<string, object?>();
         

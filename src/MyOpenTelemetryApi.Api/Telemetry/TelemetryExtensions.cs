@@ -22,7 +22,7 @@ public static class TelemetryExtensions
         var enabled = configuration.GetValue<bool>("OpenTelemetry:Exporter:File:Enabled");
         if (enabled)
         {
-            var tracePath = configuration.GetValue<string>("OpenTelemetry:Exporter:File:TracePath") 
+            _ = configuration.GetValue<string>("OpenTelemetry:Exporter:File:TracePath")
                            ?? "logs/otel-traces.json";
             // For traces, we'd implement a similar FileTraceExporter
             // For now, we'll use console exporter as file trace export is complex

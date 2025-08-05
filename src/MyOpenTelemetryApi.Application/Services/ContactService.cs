@@ -318,7 +318,7 @@ public class ContactService : IContactService
         return results;
     }
 
-    private ContactDto MapToDto(Contact contact)
+    private static ContactDto MapToDto(Contact contact)
     {
         return new ContactDto
         {

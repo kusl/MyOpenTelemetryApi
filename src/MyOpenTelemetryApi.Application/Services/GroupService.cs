@@ -74,7 +74,7 @@ public class GroupService : IGroupService
         return true;
     }
 
-    private GroupDto MapToDto(Group group)
+    private static GroupDto MapToDto(Group group)
     {
         return new GroupDto
         {
