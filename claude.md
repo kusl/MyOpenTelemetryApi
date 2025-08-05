@@ -380,3 +380,85 @@ Given that both packages are in preview/experimental state, I'd recommend Option
 
 is there a way to follow transitive dependencies like this? 
 
+Yes! There are several ways to trace transitive dependencies in .NET:
+
+## 1. Using `dotnet list package --include-transitive`
+
+This shows all dependencies including transitive ones:
+
+```powershell
+# Show all transitive dependencies
+cd src/MyOpenTelemetryApi.Api
+dotnet list package --include-transitive
+
+# Show with versions
+dotnet list package --include-transitive --format json > dependencies.json
+```
+
+## 2. Using Visual Studio's Dependency Tree
+
+In Visual Studio:
+- Right-click on the project → "Manage NuGet Packages"
+- Go to "Installed" tab
+- Click on any package to see its dependencies
+
+## 3. Using `dotnet nuget why`
+
+This command shows why a package is included:
+
+```powershell
+# See why Microsoft.EntityFrameworkCore.Relational is included
+dotnet nuget why MyOpenTelemetryApi.Api.csproj Microsoft.EntityFrameworkCore.Relational
+```
+
+## 4. Generate a Dependency Graph
+
+```powershell
+# Install the tool
+dotnet tool install -g dotnet-depends
+
+# Generate dependency graph
+dotnet depends tree --framework net9.0
+```
+
+## 5. MSBuild Binary Log
+
+This gives the most detailed information:
+
+```powershell
+# Build with binary log
+dotnet build /bl:build.binlog
+
+# Install MSBuild Log Viewer
+dotnet tool install -g MSBuildStructuredLog
+
+# View the log
+msbuildlog build.binlog
+```
+
+## 6. Check the specific conflict
+
+For your specific case, to see where EF Core 9.0.1 comes from:
+
+```powershell
+cd src/MyOpenTelemetryApi.Api
+
+# List all packages with their dependencies
+dotnet list package --include-transitive | findstr EntityFrameworkCore
+
+# Or use grep on Linux/Mac
+dotnet list package --include-transitive | grep EntityFrameworkCore
+```
+
+## 7. Use NuGet Package Explorer
+
+Download [NuGet Package Explorer](https://github.com/NuGetPackageExplorer/NuGetPackageExplorer) and open the `.nupkg` file for `OpenTelemetry.Instrumentation.EntityFrameworkCore` to see its dependencies.
+
+For your specific issue, try:
+
+```powershell
+cd src/MyOpenTelemetryApi.Api
+dotnet list package --include-transitive --framework net9.0 | findstr "EntityFrameworkCore.Relational"
+```
+
+This should show you which package is bringing in the 9.0.1 version of `Microsoft.EntityFrameworkCore.Relational`.
