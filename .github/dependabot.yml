@@ -1,0 +1,30 @@
+# .github/dependabot.yml
+version: 2
+updates:
+  - package-ecosystem: "nuget"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    groups:
+      microsoft-packages:
+        patterns:
+          - "Microsoft.*"
+          - "System.*"
+      opentelemetry:
+        patterns:
+          - "OpenTelemetry*"
+      test-packages:
+        patterns:
+          - "xunit*"
+          - "coverlet*"
+          - "*.Test.*"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+
