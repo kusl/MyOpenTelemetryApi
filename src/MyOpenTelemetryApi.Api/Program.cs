@@ -1,4 +1,4 @@
-
+﻿
 // src/MyOpenTelemetryApi.Api/Program.cs - Updated version with configuration-based setup
 using Microsoft.EntityFrameworkCore;
 using MyOpenTelemetryApi.Application.Services;
@@ -214,5 +214,229 @@ if (app.Environment.IsDevelopment())
 }
 
 app.Logger.LogInformation("Starting {ServiceName} version {ServiceVersion}", serviceName, serviceVersion);
+
+// Add a friendly landing page at the root
+app.MapGet("/", () => Results.Content("""
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Manager API</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.2em;
+        }
+        
+        .welcome {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+        
+        p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .endpoints {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+        
+        .endpoints h2 {
+            color: #333;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+        }
+        
+        .endpoint-list {
+            list-style: none;
+        }
+        
+        .endpoint-list li {
+            margin-bottom: 12px;
+        }
+        
+        .endpoint-list a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            padding: 8px 12px;
+            border-radius: 6px;
+            background: white;
+        }
+        
+        .endpoint-list a:hover {
+            background: #667eea;
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .method {
+            background: #28a745;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .coming-soon {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .coming-soon strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #888;
+            font-size: 0.9em;
+        }
+        
+        .tech-stack {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .tech-badge {
+            background: #f0f0f0;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            color: #555;
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2em;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📞 Contact Manager API</h1>
+        <p class="subtitle">Personal Information Management System</p>
+        
+        <p class="welcome">Hello, friend! Thank you for checking out this website. 👋</p>
+        
+        <p>
+            This is an API server for managing contacts, groups, and tags. 
+            It's built with modern .NET and provides a RESTful interface for 
+            personal information management.
+        </p>
+        
+        <div class="endpoints">
+            <h2>🔗 Available Endpoints</h2>
+            <ul class="endpoint-list">
+                <li>
+                    <a href="/api/health">
+                        <span class="method">GET</span>
+                        /api/health - Check service health
+                    </a>
+                </li>
+                <li>
+                    <a href="/api/health/ready">
+                        <span class="method">GET</span>
+                        /api/health/ready - Check service readiness
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="coming-soon">
+            <strong>🚀 Coming Soon:</strong>
+            Interactive API documentation with Swagger/OpenAPI will be available here soon. 
+            For now, you can use the health endpoints above to verify the service is running.
+        </div>
+        
+        <div class="footer">
+            <p>Built with ❤️ using modern technologies</p>
+            <div class="tech-stack">
+                <span class="tech-badge">.NET 9</span>
+                <span class="tech-badge">PostgreSQL</span>
+                <span class="tech-badge">OpenTelemetry</span>
+                <span class="tech-badge">Docker</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+""", "text/html"));
 
 app.Run();
