@@ -1,0 +1,63 @@
+# .dockerignore
+**/.dockerignore
+**/.env
+**/.git
+**/.gitignore
+**/.project
+**/.settings
+**/.toolstarget
+**/.vs
+**/.vscode
+**/.idea
+**/*.*proj.user
+**/*.dbmdl
+**/*.jfm
+**/azds.yaml
+**/bin
+**/charts
+**/docker-compose*
+**/Dockerfile*
+**/node_modules
+**/npm-debug.log
+**/obj
+**/secrets.dev.yaml
+**/values.dev.yaml
+LICENSE
+README.md
+**/*.md
+logs/
+*.log
+
+# Exclude build artifacts
+**/bin/
+**/obj/
+**/out/
+
+# Exclude OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Exclude IDE files
+.vs/
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Exclude test results
+TestResults/
+[Tt]est[Rr]esult*/
+*.Coverage
+*.coverage
+*.coveragexml
+
+# Exclude packages
+*.nupkg
+*.snupkg

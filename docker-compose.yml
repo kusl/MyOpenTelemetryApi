@@ -1,0 +1,82 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: myotel-postgres
+    environment:
+      POSTGRES_DB: myoteldb
+      POSTGRES_USER: myoteluser
+      POSTGRES_PASSWORD: myotelpass123
+      POSTGRES_HOST_AUTH_METHOD: md5
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U myoteluser -d myoteldb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - myotel-network
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: myotel-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=myoteldb;Username=myoteluser;Password=myotelpass123;
+      - OpenTelemetry__ServiceName=MyOpenTelemetryApi
+      - OpenTelemetry__ServiceVersion=1.0.0-container
+      - OpenTelemetry__Exporter__Console__Enabled=true
+      - OpenTelemetry__Exporter__File__Enabled=true
+      - OpenTelemetry__Exporter__File__LogPath=/app/logs/otel-logs.json
+      - OpenTelemetry__Exporter__OTLP__Enabled=false
+      - OpenTelemetry__Sampling__AlwaysOn=true
+      - Logging__LogLevel__Default=Information
+      - Logging__LogLevel__Microsoft.AspNetCore=Information
+      - Logging__LogLevel__Microsoft.EntityFrameworkCore.Database.Command=Information
+    ports:
+      - "5174:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - myotel-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/api/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: Add a simple web UI to view logs
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: myotel-portainer
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    networks:
+      - myotel-network
+    profiles:
+      - tools
+
+volumes:
+  postgres_data:
+    driver: local
+  portainer_data:
+    driver: local
+
+networks:
+  myotel-network:
+    driver: bridge
