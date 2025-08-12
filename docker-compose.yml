@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   db:
-    image: postgres:16-alpine
+    image: docker.io/library/postgres:16-alpine
     container_name: myotel-postgres
     environment:
       POSTGRES_DB: myoteldb
@@ -59,7 +59,7 @@ services:
 
   # Optional: Add a simple web UI to view logs
   portainer:
-    image: portainer/portainer-ce:latest
+    image: docker.io/portainer/portainer-ce:latest
     container_name: myotel-portainer
     ports:
       - "9000:9000"
