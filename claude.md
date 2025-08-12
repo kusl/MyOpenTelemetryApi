@@ -1,60 +1,50 @@
-Ah, I understand now! You're SSH'd into a Debian machine (let's say at `192.168.0.120`) and you want to access the API from your local computer's browser. The current setup only binds to `localhost` on the Debian machine, so it's not accessible from external machines.
+The issue is that we're trying to install the `dotnet-ef` tool in the runtime container, but the runtime image doesn't include the .NET SDK - only the runtime. Let me fix this by installing the EF tools in the build stage and copying them over.Actually, let me simplify this approach. The issue is complex because we need to copy tools between users. Let me create a simpler solution that doesn't require EF tools in the container, and instead provides better migration alternatives:Now let me update the migration script to remove the container-based migration option and focus on the automatic migration that happens on startup, plus add a SQL-based migration approach:Perfect! I've fixed the Docker issue and simplified the migration approach. Here's what changed:
 
-Let me fix the port bindings to expose the services on all network interfaces:Now let me create a network testing script to verify external access:Now let me update the setup script to include network testing:Perfect! Now I've fixed the networking to allow external access. Here's what changed:
+## 🔧 **Docker Issue Fixed:**
+- **Removed EF tools installation** from the runtime container (which doesn't have .NET SDK)
+- **Simplified Dockerfile** to focus on running the application
+- **Kept automatic migrations** that run on container startup via `Program.cs`
 
-## 🌐 **External Access Configuration:**
+## 🗄️ **Migration Strategy Updated:**
 
-### **Port Bindings Changed:**
-```yaml
-# Before (localhost only)
-ports:
-  - "5174:8080"
-  - "5432:5432"
-
-# After (all interfaces)  
-ports:
-  - "0.0.0.0:5174:8080"
-  - "0.0.0.0:5432:5432"
+### **1. Automatic Migrations (Recommended)**
+The application already runs migrations automatically on startup:
+```bash
+./run-migrations.sh auto  # Check if automatic migrations worked
 ```
 
-### **Now You Can Access:**
-From your local computer's browser:
-- **🌐 API**: `http://192.168.0.120:5174/api/health`
-- **🌐 Root Page**: `http://192.168.0.120:5174/`
-- **🌐 Contacts**: `http://192.168.0.120:5174/api/contacts`
-- **🗄️ Database**: `192.168.0.120:5432` (for tools like pgAdmin)
+### **2. Manual SQL Schema Creation**
+If automatic migrations fail, you can create the schema manually:
+```bash
+./run-migrations.sh manual  # Create schema using raw SQL
+```
+
+### **3. Local .NET CLI (If you have .NET SDK)**
+```bash
+./run-migrations.sh local   # Use local dotnet ef commands
+```
 
 ## 🚀 **Try it now:**
 
 ```bash
-# Rebuild with external access
+# Clean rebuild 
 ./cleanup-and-retry.sh
 
-# Test external network access
-chmod +x test-external-access.sh
+# Check if automatic migrations worked
+./run-migrations.sh auto
+
+# If they failed, create schema manually
+./run-migrations.sh manual
+
+# Test external access
 ./test-external-access.sh
 ```
 
-The network test script will:
-- ✅ Detect all IP addresses on your Debian machine
-- ✅ Check if ports are bound correctly for external access
-- ✅ Test API endpoints from each IP address
-- ✅ Show you the exact URLs to use from your browser
-- ✅ Check firewall status and provide troubleshooting tips
+## 💡 **How it works:**
 
-## 🔒 **Firewall Considerations:**
+1. **Container starts** → Automatic migrations run (via `Program.cs`)
+2. **If migrations fail** → Use manual SQL schema creation
+3. **For new migrations** → Use local .NET CLI or modify existing migrations
+4. **Database is ready** → API endpoints work from external browsers
 
-If you can't access from your local machine, you might need to open the firewall:
-
-```bash
-# On your Debian machine
-sudo ufw allow 5174/tcp  # For API access
-sudo ufw allow 5432/tcp  # For database access (optional)
-```
-
-## 🎯 **Expected URLs from your browser:**
-- `http://192.168.0.120:5174/` - Beautiful landing page
-- `http://192.168.0.120:5174/api/health` - JSON health status
-- `http://192.168.0.120:5174/api/contacts` - Empty contacts array initially
-
-The test script will show you all available IP addresses and test each one automatically!
+This approach is much simpler and avoids the complexity of installing .NET SDK tools in the runtime container. The automatic migrations should handle most cases, and the manual SQL fallback ensures you can always get the database schema created!

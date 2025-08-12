@@ -135,7 +135,7 @@ show_status() {
     echo -e "${YELLOW}Shell into API:${NC}    podman exec -it myotel-api /bin/bash"
     echo -e "${YELLOW}Shell into DB:${NC}     podman exec -it myotel-postgres psql -U myoteluser -d myoteldb"
     echo -e "${YELLOW}View containers:${NC}   podman ps"
-    echo -e "${YELLOW}Run migrations:${NC}    ./run-migrations.sh container"
+    echo -e "${YELLOW}Run migrations:${NC}    ./run-migrations.sh auto"
     echo -e "${YELLOW}Test external access:${NC} ./test-external-access.sh"
 }
 

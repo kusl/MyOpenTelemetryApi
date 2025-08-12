@@ -27,31 +27,168 @@ if ! podman ps | grep -q myotel-api; then
     exit 1
 fi
 
-# Function to run migrations using the API container
-run_migrations_in_container() {
-    echo -e "${BLUE}🔄 Running migrations inside the API container...${NC}"
+# Function to run migrations using the API container (startup migrations)
+check_automatic_migrations() {
+    echo -e "${BLUE}🔄 Checking automatic migration status...${NC}"
     
-    podman exec -it myotel-api dotnet ef database update --verbose
+    echo -e "${YELLOW}Automatic migrations run on container startup.${NC}"
+    echo -e "${YELLOW}Checking API container logs for migration status...${NC}"
+    
+    if podman logs myotel-api 2>/dev/null | grep -q "Applying database migrations"; then
+        if podman logs myotel-api 2>/dev/null | grep -q "Database migrations applied successfully"; then
+            echo -e "${GREEN}✅ Automatic migrations completed successfully${NC}"
+        else
+            echo -e "${RED}❌ Automatic migrations may have failed${NC}"
+            echo -e "${YELLOW}💡 Check logs: podman logs myotel-api${NC}"
+        fi
+    else
+        echo -e "${YELLOW}⚠️  No migration logs found - container may still be starting${NC}"
+    fi
+    
+    echo -e "${BLUE}💡 Migrations run automatically when the API container starts${NC}"
+}
+
+# Function to manually create database schema (SQL approach)
+create_schema_manually() {
+    echo -e "${BLUE}🔄 Creating database schema manually using SQL...${NC}"
+    
+    echo -e "${YELLOW}This will execute the initial migration SQL directly${NC}"
+    
+    # Check if the InitialCreate migration exists
+    if [ ! -f "src/MyOpenTelemetryApi.Infrastructure/Data/Migrations/20250804231722_InitialCreate.cs" ]; then
+        echo -e "${RED}❌ InitialCreate migration file not found${NC}"
+        exit 1
+    fi
+    
+    # Create tables manually using SQL
+    cat << 'EOF' | podman exec -i myotel-postgres psql -U myoteluser -d myoteldb
+-- Create migration history table
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    "MigrationId" character varying(150) NOT NULL,
+    "ProductVersion" character varying(32) NOT NULL,
+    CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId")
+);
+
+-- Insert migration record
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion") 
+VALUES ('20250804231722_InitialCreate', '9.0.8')
+ON CONFLICT ("MigrationId") DO NOTHING;
+
+-- Create tables (based on the migration file)
+CREATE TABLE IF NOT EXISTS "Contacts" (
+    "Id" uuid NOT NULL,
+    "FirstName" character varying(100) NOT NULL,
+    "LastName" character varying(100) NOT NULL,
+    "MiddleName" character varying(100),
+    "Nickname" character varying(50),
+    "Company" character varying(200),
+    "JobTitle" character varying(100),
+    "DateOfBirth" timestamp with time zone,
+    "Notes" character varying(1000),
+    "CreatedAt" timestamp with time zone NOT NULL,
+    "UpdatedAt" timestamp with time zone NOT NULL,
+    CONSTRAINT "PK_Contacts" PRIMARY KEY ("Id")
+);
+
+CREATE TABLE IF NOT EXISTS "Groups" (
+    "Id" uuid NOT NULL,
+    "Name" character varying(100) NOT NULL,
+    "Description" character varying(500),
+    "CreatedAt" timestamp with time zone NOT NULL,
+    CONSTRAINT "PK_Groups" PRIMARY KEY ("Id")
+);
+
+CREATE TABLE IF NOT EXISTS "Tags" (
+    "Id" uuid NOT NULL,
+    "Name" character varying(50) NOT NULL,
+    "ColorHex" character varying(7),
+    CONSTRAINT "PK_Tags" PRIMARY KEY ("Id")
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS "IX_Tags_Name" ON "Tags" ("Name");
+
+CREATE TABLE IF NOT EXISTS "Addresses" (
+    "Id" uuid NOT NULL,
+    "ContactId" uuid NOT NULL,
+    "StreetLine1" character varying(200),
+    "StreetLine2" character varying(200),
+    "City" character varying(100),
+    "StateProvince" character varying(100),
+    "PostalCode" character varying(20),
+    "Country" character varying(100),
+    "Type" character varying(20) NOT NULL,
+    "IsPrimary" boolean NOT NULL,
+    CONSTRAINT "PK_Addresses" PRIMARY KEY ("Id"),
+    CONSTRAINT "FK_Addresses_Contacts_ContactId" FOREIGN KEY ("ContactId") REFERENCES "Contacts" ("Id") ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS "IX_Addresses_ContactId" ON "Addresses" ("ContactId");
+
+CREATE TABLE IF NOT EXISTS "EmailAddresses" (
+    "Id" uuid NOT NULL,
+    "ContactId" uuid NOT NULL,
+    "Email" character varying(254) NOT NULL,
+    "Type" character varying(20) NOT NULL,
+    "IsPrimary" boolean NOT NULL,
+    CONSTRAINT "PK_EmailAddresses" PRIMARY KEY ("Id"),
+    CONSTRAINT "FK_EmailAddresses_Contacts_ContactId" FOREIGN KEY ("ContactId") REFERENCES "Contacts" ("Id") ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS "IX_EmailAddresses_ContactId" ON "EmailAddresses" ("ContactId");
+
+CREATE TABLE IF NOT EXISTS "PhoneNumbers" (
+    "Id" uuid NOT NULL,
+    "ContactId" uuid NOT NULL,
+    "Number" character varying(50) NOT NULL,
+    "Type" character varying(20) NOT NULL,
+    "IsPrimary" boolean NOT NULL,
+    CONSTRAINT "PK_PhoneNumbers" PRIMARY KEY ("Id"),
+    CONSTRAINT "FK_PhoneNumbers_Contacts_ContactId" FOREIGN KEY ("ContactId") REFERENCES "Contacts" ("Id") ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS "IX_PhoneNumbers_ContactId" ON "PhoneNumbers" ("ContactId");
+
+CREATE TABLE IF NOT EXISTS "ContactGroups" (
+    "ContactId" uuid NOT NULL,
+    "GroupId" uuid NOT NULL,
+    "AddedAt" timestamp with time zone NOT NULL,
+    CONSTRAINT "PK_ContactGroups" PRIMARY KEY ("ContactId", "GroupId"),
+    CONSTRAINT "FK_ContactGroups_Contacts_ContactId" FOREIGN KEY ("ContactId") REFERENCES "Contacts" ("Id") ON DELETE CASCADE,
+    CONSTRAINT "FK_ContactGroups_Groups_GroupId" FOREIGN KEY ("GroupId") REFERENCES "Groups" ("Id") ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS "IX_ContactGroups_GroupId" ON "ContactGroups" ("GroupId");
+
+CREATE TABLE IF NOT EXISTS "ContactTags" (
+    "ContactId" uuid NOT NULL,
+    "TagId" uuid NOT NULL,
+    CONSTRAINT "PK_ContactTags" PRIMARY KEY ("ContactId", "TagId"),
+    CONSTRAINT "FK_ContactTags_Contacts_ContactId" FOREIGN KEY ("ContactId") REFERENCES "Contacts" ("Id") ON DELETE CASCADE,
+    CONSTRAINT "FK_ContactTags_Tags_TagId" FOREIGN KEY ("TagId") REFERENCES "Tags" ("Id") ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS "IX_ContactTags_TagId" ON "ContactTags" ("TagId");
+
+EOF
     
     if [ $? -eq 0 ]; then
-        echo -e "${GREEN}✅ Migrations completed successfully${NC}"
+        echo -e "${GREEN}✅ Database schema created successfully${NC}"
     else
-        echo -e "${RED}❌ Migration failed${NC}"
+        echo -e "${RED}❌ Failed to create database schema${NC}"
         exit 1
     fi
 }
-
 # Function to run migrations using local dotnet CLI
 run_migrations_locally() {
     echo -e "${BLUE}🔄 Running migrations using local .NET CLI...${NC}"
     
     if ! command -v dotnet &> /dev/null; then
         echo -e "${RED}❌ .NET CLI not found locally${NC}"
-        echo -e "${YELLOW}💡 Try using container method instead${NC}"
+        echo -e "${YELLOW}💡 Try using automatic migrations or manual schema creation${NC}"
         exit 1
     fi
     
-    # Set the connection string for local execution
+    # Set the connection string for local execution - PostgreSQL is exposed on localhost:5432
     export ConnectionStrings__DefaultConnection="Host=localhost;Port=5432;Database=myoteldb;Username=myoteluser;Password=myotelpass123;"
     
     cd src/MyOpenTelemetryApi.Api
@@ -130,7 +267,7 @@ create_migration() {
     
     cd src/MyOpenTelemetryApi.Api
     
-    # Set the connection string for local execution
+    # Set the connection string for local execution - PostgreSQL is exposed on localhost:5432
     export ConnectionStrings__DefaultConnection="Host=localhost;Port=5432;Database=myoteldb;Username=myoteluser;Password=myotelpass123;"
     
     dotnet ef migrations add "$migration_name" --verbose
