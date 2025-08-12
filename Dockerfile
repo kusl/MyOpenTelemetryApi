@@ -44,8 +44,13 @@ RUN mkdir -p /app/logs && chmod 755 /app/logs
 # Copy published application
 COPY --from=publish /app/publish .
 
-# Create a non-root user
+# Create a non-root user first
 RUN adduser --disabled-password --gecos "" --uid 1000 appuser && chown -R appuser:appuser /app
+
+# Switch to appuser and install EF Core tools
+USER appuser
+RUN dotnet tool install --global dotnet-ef --version 9.0.8
+ENV PATH="$PATH:/home/appuser/.dotnet/tools"
 USER appuser
 
 ENTRYPOINT ["dotnet", "MyOpenTelemetryApi.Api.dll"]
