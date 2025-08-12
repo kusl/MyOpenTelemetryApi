@@ -21,14 +21,46 @@ if [ "$confirm" != "yes" ]; then
     exit 0
 fi
 
+echo -e "${YELLOW}🔄 Attempting compose down first (handles dependencies properly)...${NC}"
+if command -v podman-compose &> /dev/null; then
+    COMPOSE_CMD="podman-compose"
+elif command -v podman &> /dev/null && podman compose version &> /dev/null; then
+    COMPOSE_CMD="podman compose"
+else
+    COMPOSE_CMD=""
+fi
+
+if [ ! -z "$COMPOSE_CMD" ]; then
+    echo -e "${BLUE}Using $COMPOSE_CMD to clean up...${NC}"
+    $COMPOSE_CMD -f docker-compose.simple.yml down --remove-orphans 2>/dev/null || true
+    $COMPOSE_CMD -f docker-compose.yml down --remove-orphans 2>/dev/null || true
+    $COMPOSE_CMD -f podman-compose.yml down --remove-orphans 2>/dev/null || true
+    echo -e "${GREEN}Compose cleanup completed${NC}"
+else
+    echo -e "${YELLOW}No compose command found, using manual cleanup${NC}"
+fi
+
 echo -e "${YELLOW}🛑 Stopping ALL containers with myotel prefix...${NC}"
 podman ps -q --filter "name=myotel" | xargs -r podman stop
 
-echo -e "${YELLOW}🗑️ Force removing ALL containers with myotel prefix...${NC}"
+echo -e "${YELLOW}🗑️ Force removing dependent containers first...${NC}"
+# Remove API container first (it depends on postgres)
+podman ps -aq --filter "name=myotel-api" | xargs -r podman rm -f
+podman ps -aq --filter "name=myotel-migrations" | xargs -r podman rm -f
+
+echo -e "${YELLOW}🗑️ Force removing database container...${NC}"
+# Then remove postgres container
+podman ps -aq --filter "name=myotel-postgres" | xargs -r podman rm -f
+
+echo -e "${YELLOW}🗑️ Force removing any remaining myotel containers...${NC}"
+# Clean up any remaining ones
 podman ps -aq --filter "name=myotel" | xargs -r podman rm -f
 
-echo -e "${YELLOW}🧹 Removing containers by image...${NC}"
+echo -e "${YELLOW}🧹 Removing containers by image (dependent containers first)...${NC}"
+# Remove API containers first
 podman ps -aq --filter "ancestor=localhost/myopentelemetryapi_api" | xargs -r podman rm -f
+podman ps -aq --filter "ancestor=localhost/myopentelemetryapi_migrations" | xargs -r podman rm -f
+# Then remove postgres containers
 podman ps -aq --filter "ancestor=docker.io/library/postgres:16-alpine" | xargs -r podman rm -f
 
 echo -e "${YELLOW}🖼️ Removing built images...${NC}"

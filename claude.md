@@ -1,49 +1,68 @@
-The issue is that the cleanup script isn't properly removing the existing containers. Let me fix the cleanup script to handle this better:Also, let me update the main setup script's cleanup function to be more thorough:Now let me create a quick emergency cleanup script for when things get really stuck:Perfect! Now you have multiple options to handle stuck containers:
+kushal@texas:~/src/MyOpenTelemetryApi$ time bash emergency-cleanup.sh
+🚨 EMERGENCY CLEANUP - This will force remove everything
+========================================================
+Are you sure you want to force cleanup everything? (yes/no): yes
+🛑 Stopping ALL containers with myotel prefix...
+0f2d1130c01d
+4ab02d285b39
+🗑️ Force removing ALL containers with myotel prefix...
+4ab02d285b39
+Error: container 0f2d1130c01de35e4d1e9faf3fcd4e101c51aaf3dbdb7ec3457ba1498866e3cd has dependent containers which must be removed before it: 4ab02d285b39ac40b1aad85fc237096dbcf0ec7c7faf06f9b7aa0f0c63636813: container already exists
 
-## 🚨 **Immediate Solution:**
+real    0m4.103s
+user    0m0.284s
+sys     0m0.131s
+kushal@texas:~/src/MyOpenTelemetryApi$
+
+
+
+
+
+The issue is that there are container dependencies - one container depends on another, so we need to remove them in the right order. Let me fix the emergency cleanup script to handle dependencies properly:Now let me also add a simpler approach - using `podman-compose down` to properly handle dependencies:Let me also create a simpler, more targeted cleanup script:Perfect! Now you have better cleanup options. Try this:
+
+## 🚀 **Recommended approach:**
 
 ```bash
-# Make the emergency cleanup script executable
-chmod +x emergency-cleanup.sh
+# Make the quick cleanup script executable  
+chmod +x quick-cleanup.sh
 
-# Run the nuclear cleanup option
-./emergency-cleanup.sh
+# Use compose to handle dependencies properly
+./quick-cleanup.sh
 
 # Then start fresh
 ./setup-podman.sh
 ```
 
-## 🔧 **What the emergency cleanup does:**
-
-1. **Stops ALL containers** with "myotel" prefix
-2. **Force removes containers** by name and by image
-3. **Removes built images** so they get rebuilt
-4. **Cleans up networks and volumes**
-5. **Prunes unused resources**
-6. **Shows you what's left**
-
-## 🛠️ **Or try the improved regular cleanup:**
+## 🔄 **If that doesn't work, try the updated emergency cleanup:**
 
 ```bash
-# The regular cleanup is now more thorough
-./cleanup-and-retry.sh
+# The emergency cleanup now handles dependencies better
+./emergency-cleanup.sh
 ```
 
-## 🔍 **Why this happened:**
+## 🧠 **Why this happened:**
 
-The error shows that container `myotel-postgres` with ID `0f2d1130c01d...` already exists. This usually happens when:
-- Previous cleanup didn't complete properly
-- Container is in a weird state (exited but not removed)
-- Name conflict from previous runs
+The error shows that container `0f2d1130c01d` (postgres) has a dependent container `4ab02d285b39` (api). Podman won't let you remove the postgres container while the API container depends on it.
 
-## 📋 **Check current state:**
+## 🎯 **The quick-cleanup.sh approach:**
+
+1. **Uses compose down** - This properly handles dependencies
+2. **Tries all compose files** - Covers all possible setups  
+3. **Includes --remove-orphans** - Cleans up dangling containers
+4. **Includes --volumes** - Resets data volumes too
+5. **Removes built images** - Forces rebuild
+
+## 🛠️ **Manual approach if needed:**
 
 ```bash
-# See what containers exist
-podman ps -a
+# Remove dependent containers first
+podman rm -f myotel-api myotel-migrations 2>/dev/null || true
 
-# See what's using the names
-podman ps -a --filter "name=myotel"
+# Then remove postgres
+podman rm -f myotel-postgres 2>/dev/null || true
+
+# Then start fresh
+./setup-podman.sh
 ```
 
-The emergency cleanup script will handle all these edge cases and give you a completely clean slate to work with!
+The `quick-cleanup.sh` script should handle this much more elegantly by using compose to understand and respect the container dependencies!
