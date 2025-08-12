@@ -1,0 +1,25 @@
+# Dockerfile.migrations - Dedicated container for running EF migrations
+FROM mcr.microsoft.com/dotnet/sdk:9.0
+
+WORKDIR /src
+
+# Copy project files for restore
+COPY ["src/MyOpenTelemetryApi.Api/MyOpenTelemetryApi.Api.csproj", "src/MyOpenTelemetryApi.Api/"]
+COPY ["src/MyOpenTelemetryApi.Application/MyOpenTelemetryApi.Application.csproj", "src/MyOpenTelemetryApi.Application/"]
+COPY ["src/MyOpenTelemetryApi.Domain/MyOpenTelemetryApi.Domain.csproj", "src/MyOpenTelemetryApi.Domain/"]
+COPY ["src/MyOpenTelemetryApi.Infrastructure/MyOpenTelemetryApi.Infrastructure.csproj", "src/MyOpenTelemetryApi.Infrastructure/"]
+
+# Restore dependencies
+RUN dotnet restore "src/MyOpenTelemetryApi.Api/MyOpenTelemetryApi.Api.csproj"
+
+# Copy source code
+COPY . .
+
+WORKDIR "/src/src/MyOpenTelemetryApi.Api"
+
+# Install EF Core tools
+RUN dotnet tool install --global dotnet-ef --version 9.0.8
+ENV PATH="$PATH:/root/.dotnet/tools"
+
+# Default command runs migrations
+CMD ["dotnet", "ef", "database", "update", "--verbose"]
