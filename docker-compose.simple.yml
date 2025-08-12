@@ -9,7 +9,7 @@ services:
       POSTGRES_USER: myoteluser
       POSTGRES_PASSWORD: myotelpass123
     ports:
-      - "5432:5432"
+      - "0.0.0.0:5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
@@ -22,7 +22,7 @@ services:
     container_name: myotel-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:8080
+      - ASPNETCORE_URLS=http://0.0.0.0:8080
       - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=myoteldb;Username=myoteluser;Password=myotelpass123;
       - OpenTelemetry__ServiceName=MyOpenTelemetryApi
       - OpenTelemetry__ServiceVersion=1.0.0-container
@@ -32,7 +32,7 @@ services:
       - OpenTelemetry__Exporter__OTLP__Enabled=false
       - OpenTelemetry__Sampling__AlwaysOn=true
     ports:
-      - "5174:8080"
+      - "0.0.0.0:5174:8080"
     depends_on:
       - db
     volumes:

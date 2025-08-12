@@ -136,6 +136,7 @@ show_status() {
     echo -e "${YELLOW}Shell into DB:${NC}     podman exec -it myotel-postgres psql -U myoteluser -d myoteldb"
     echo -e "${YELLOW}View containers:${NC}   podman ps"
     echo -e "${YELLOW}Run migrations:${NC}    ./run-migrations.sh container"
+    echo -e "${YELLOW}Test external access:${NC} ./test-external-access.sh"
 }
 
 # Function to test the API
