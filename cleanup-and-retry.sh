@@ -15,10 +15,35 @@ echo -e "${BLUE}🧹 Cleaning up containers and trying again...${NC}"
 
 # Stop and remove any existing containers
 echo -e "${YELLOW}Stopping containers...${NC}"
-podman stop myotel-api myotel-postgres 2>/dev/null || true
+podman stop myotel-api myotel-postgres myotel-migrations 2>/dev/null || true
 
 echo -e "${YELLOW}Removing containers...${NC}"
-podman rm myotel-api myotel-postgres 2>/dev/null || true
+podman rm myotel-api myotel-postgres myotel-migrations 2>/dev/null || true
+
+# Force remove any containers that might be stuck
+echo -e "${YELLOW}Force removing any stuck containers...${NC}"
+podman rm -f myotel-api myotel-postgres myotel-migrations 2>/dev/null || true
+
+# Remove containers by ID if they still exist
+echo -e "${YELLOW}Checking for remaining containers by name...${NC}"
+POSTGRES_ID=$(podman ps -aq --filter "name=myotel-postgres" 2>/dev/null || true)
+API_ID=$(podman ps -aq --filter "name=myotel-api" 2>/dev/null || true)
+MIGRATION_ID=$(podman ps -aq --filter "name=myotel-migrations" 2>/dev/null || true)
+
+if [ ! -z "$POSTGRES_ID" ]; then
+    echo -e "${YELLOW}Removing PostgreSQL container by ID: $POSTGRES_ID${NC}"
+    podman rm -f "$POSTGRES_ID" 2>/dev/null || true
+fi
+
+if [ ! -z "$API_ID" ]; then
+    echo -e "${YELLOW}Removing API container by ID: $API_ID${NC}"
+    podman rm -f "$API_ID" 2>/dev/null || true
+fi
+
+if [ ! -z "$MIGRATION_ID" ]; then
+    echo -e "${YELLOW}Removing migration container by ID: $MIGRATION_ID${NC}"
+    podman rm -f "$MIGRATION_ID" 2>/dev/null || true
+fi
 
 # Remove the built image so it gets rebuilt with fixes
 echo -e "${YELLOW}Removing built images...${NC}"

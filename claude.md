@@ -1,58 +1,49 @@
-you think the solution to our problem is to duplicate code and copy create table scripts into... a shell script? 
+The issue is that the cleanup script isn't properly removing the existing containers. Let me fix the cleanup script to handle this better:Also, let me update the main setup script's cleanup function to be more thorough:Now let me create a quick emergency cleanup script for when things get really stuck:Perfect! Now you have multiple options to handle stuck containers:
 
-You're absolutely right - that's a terrible approach! Duplicating the schema definition in a shell script is exactly the kind of maintenance nightmare we should avoid. Let me fix this properly.
-
-The real solution is to either:
-1. Use a proper SDK container for migrations, or  
-2. Keep it simple and rely on the automatic migrations that already work
-
-Let me create a much better approach:You're absolutely right! That was a terrible approach. Here's the **proper solution**:
-
-## 🏗️ **Proper Migration Architecture:**
-
-### **1. Automatic Migrations (Primary)**
-The app already runs migrations on startup - no duplication needed.
-
-### **2. Dedicated Migration Container (Secondary)**
-- **Uses the .NET SDK container** (has EF tools)
-- **Uses the same source code** (no duplication)
-- **Runs proper `dotnet ef database update`**
-- **Only used when automatic migrations fail**
-
-### **3. Local .NET CLI (Tertiary)**
-For developers with local .NET SDK.
-
-## 🎯 **How it works:**
+## 🚨 **Immediate Solution:**
 
 ```bash
-# Try automatic first (already happens)
-./run-migrations.sh auto
+# Make the emergency cleanup script executable
+chmod +x emergency-cleanup.sh
 
-# If that fails, use proper EF tooling in container
-./run-migrations.sh container
+# Run the nuclear cleanup option
+./emergency-cleanup.sh
 
-# This runs a dedicated container with .NET SDK that executes:
-# dotnet ef database update --verbose
+# Then start fresh
+./setup-podman.sh
 ```
 
-## 🔧 **The Migration Container:**
-- **No code duplication** ✅
-- **Uses proper EF Core tooling** ✅  
-- **Same migration files** ✅
-- **Proper dependency management** ✅
-- **Only runs when needed** ✅
+## 🔧 **What the emergency cleanup does:**
 
-## 🚀 **Try it:**
+1. **Stops ALL containers** with "myotel" prefix
+2. **Force removes containers** by name and by image
+3. **Removes built images** so they get rebuilt
+4. **Cleans up networks and volumes**
+5. **Prunes unused resources**
+6. **Shows you what's left**
+
+## 🛠️ **Or try the improved regular cleanup:**
 
 ```bash
-# Clean rebuild
+# The regular cleanup is now more thorough
 ./cleanup-and-retry.sh
-
-# Check if automatic migrations worked
-./run-migrations.sh auto
-
-# If they didn't, use the proper migration container
-./run-migrations.sh container
 ```
 
-This approach respects the **single source of truth** principle - your EF migration files remain the authoritative schema definition, and we use proper tooling to execute them, not horrible shell script duplicates!
+## 🔍 **Why this happened:**
+
+The error shows that container `myotel-postgres` with ID `0f2d1130c01d...` already exists. This usually happens when:
+- Previous cleanup didn't complete properly
+- Container is in a weird state (exited but not removed)
+- Name conflict from previous runs
+
+## 📋 **Check current state:**
+
+```bash
+# See what containers exist
+podman ps -a
+
+# See what's using the names
+podman ps -a --filter "name=myotel"
+```
+
+The emergency cleanup script will handle all these edge cases and give you a completely clean slate to work with!
