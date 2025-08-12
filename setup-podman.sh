@@ -24,11 +24,14 @@ fi
 if ! command -v podman-compose &> /dev/null; then
     echo -e "${YELLOW}⚠️  podman-compose not found. Using 'podman compose' instead.${NC}"
     COMPOSE_CMD="podman compose"
+    COMPOSE_FILE="docker-compose.simple.yml"
 else
     COMPOSE_CMD="podman-compose"
+    COMPOSE_FILE="docker-compose.simple.yml"
 fi
 
 echo -e "${BLUE}📦 Using compose command: ${COMPOSE_CMD}${NC}"
+echo -e "${BLUE}📄 Using compose file: ${COMPOSE_FILE}${NC}"
 
 # Function to clean up existing containers and networks
 cleanup() {
@@ -84,24 +87,26 @@ wait_for_services() {
             break
         fi
         echo -n "."
-        sleep 2
+        sleep 3
         if [ $i -eq 30 ]; then
-            echo -e "${RED}❌ PostgreSQL failed to start within 60 seconds${NC}"
+            echo -e "${RED}❌ PostgreSQL failed to start within 90 seconds${NC}"
+            echo -e "${YELLOW}💡 Try running: podman logs myotel-postgres${NC}"
             exit 1
         fi
     done
     
     # Wait for API to be ready
     echo -e "${YELLOW}🌐 Waiting for API...${NC}"
-    for i in {1..30}; do
+    for i in {1..45}; do
         if curl -s http://localhost:5174/api/health &>/dev/null; then
             echo -e "${GREEN}✅ API is ready${NC}"
             break
         fi
         echo -n "."
-        sleep 2
-        if [ $i -eq 30 ]; then
-            echo -e "${RED}❌ API failed to start within 60 seconds${NC}"
+        sleep 3
+        if [ $i -eq 45 ]; then
+            echo -e "${RED}❌ API failed to start within 135 seconds${NC}"
+            echo -e "${YELLOW}💡 Try running: podman logs myotel-api${NC}"
             exit 1
         fi
     done
@@ -123,10 +128,10 @@ show_status() {
     echo -e "📝 Application Logs: ${GREEN}./logs/otel-logs.json${NC}"
     echo -e "\n${BLUE}🛠️  Useful Commands:${NC}"
     echo "=================================="
-    echo -e "${YELLOW}View API logs:${NC}     $COMPOSE_CMD logs -f api"
-    echo -e "${YELLOW}View DB logs:${NC}      $COMPOSE_CMD logs -f db"
-    echo -e "${YELLOW}Stop services:${NC}     $COMPOSE_CMD down"
-    echo -e "${YELLOW}Restart API:${NC}       $COMPOSE_CMD restart api"
+    echo -e "${YELLOW}View API logs:${NC}     $COMPOSE_CMD -f $COMPOSE_FILE logs -f api"
+    echo -e "${YELLOW}View DB logs:${NC}      $COMPOSE_CMD -f $COMPOSE_FILE logs -f db"
+    echo -e "${YELLOW}Stop services:${NC}     $COMPOSE_CMD -f $COMPOSE_FILE down"
+    echo -e "${YELLOW}Restart API:${NC}       $COMPOSE_CMD -f $COMPOSE_FILE restart api"
     echo -e "${YELLOW}Shell into API:${NC}    podman exec -it myotel-api /bin/bash"
     echo -e "${YELLOW}Shell into DB:${NC}     podman exec -it myotel-postgres psql -U myoteluser -d myoteldb"
     echo -e "${YELLOW}View containers:${NC}   podman ps"
@@ -210,7 +215,7 @@ main() {
     
     if [ "$SHOW_LOGS" = true ]; then
         echo -e "\n${BLUE}📋 Showing API logs (Ctrl+C to exit):${NC}"
-        $COMPOSE_CMD logs -f api
+        $COMPOSE_CMD -f $COMPOSE_FILE logs -f api
     fi
 }
 
@@ -218,4 +223,4 @@ main() {
 main
 
 echo -e "\n${GREEN}🎯 Setup completed successfully!${NC}"
-echo -e "${BLUE}💡 Tip: Run '$COMPOSE_CMD logs -f api' to follow application logs${NC}"
+echo -e "${BLUE}💡 Tip: Run '$COMPOSE_CMD -f $COMPOSE_FILE logs -f api' to follow application logs${NC}"

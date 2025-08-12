@@ -34,6 +34,10 @@ RUN dotnet publish "MyOpenTelemetryApi.Api.csproj" -c $BUILD_CONFIGURATION -o /a
 FROM base AS final
 WORKDIR /app
 
+# Install curl for health checks
+USER root
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
 # Create logs directory with proper permissions
 RUN mkdir -p /app/logs && chmod 755 /app/logs
 

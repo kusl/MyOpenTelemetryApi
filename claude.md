@@ -1,61 +1,38 @@
-I'll help you containerize your OpenTelemetry API application to run in Podman with PostgreSQL. Let me create the necessary Docker configuration files and a Podman Compose setup.I've created a complete containerization setup for your OpenTelemetry API application to run with Podman and PostgreSQL. Here's what I've provided:
+I see the issue! The problem is with the health check syntax in the compose file. The `CMD-SHELL` format isn't being parsed correctly by podman-compose. Let me fix this for you.Now I need to update the Dockerfile to install curl since it's needed for the health check:Now let's create a simplified version that should work better with podman-compose:Now let's update the setup script to use the simple version and add some better error handling:Perfect! The issue was with the health check syntax in the compose files. The problem is that `podman-compose` doesn't handle `CMD-SHELL` the same way Docker does. Here's what I've fixed:
 
-## 🐳 **Container Files Created:**
+## 🔧 **Issues Fixed:**
 
-1. **Dockerfile** - Multi-stage build optimized for .NET 9 applications
-2. **docker-compose.yml** - Standard Docker Compose configuration
-3. **podman-compose.yml** - Podman-specific compose file with SELinux support
-4. **setup-podman.sh** - Automated setup script with health checks and testing
-5. **.dockerignore** - Optimized Docker ignore file
-6. **appsettings.Container.json** - Container-specific configuration
-7. **CONTAINER_SETUP.md** - Comprehensive setup and troubleshooting guide
+1. **Health Check Syntax**: Changed from `CMD-SHELL` format to `CMD` array format which is more compatible with podman-compose
+2. **Added curl to container**: Updated Dockerfile to install curl for health checks
+3. **Created simplified compose file**: `docker-compose.simple.yml` without complex health checks
+4. **Extended wait times**: Increased timeouts for service startup (especially for .NET app startup)
+5. **Better error messages**: Added log viewing hints when services fail to start
 
-## 🚀 **Quick Start Instructions:**
-
-1. **Place the files in your project root directory**
-
-2. **Make the setup script executable:**
-   ```bash
-   chmod +x setup-podman.sh
-   ```
-
-3. **Run the automated setup:**
-   ```bash
-   ./setup-podman.sh
-   ```
-
-## 🔧 **Key Features:**
-
-- **PostgreSQL Database**: Runs in a separate container with health checks
-- **Automatic Migration**: Database migrations run on startup in development
-- **OpenTelemetry Logging**: File-based telemetry logs in `./logs/` directory
-- **Health Checks**: Both application and database health monitoring
-- **SELinux Support**: Volumes configured with `:Z` flag for Podman/SELinux
-- **Development Optimized**: Easy cleanup, rebuild, and testing
-
-## 🌐 **Service Endpoints:**
-
-- **API**: http://localhost:5174
-- **Health Check**: http://localhost:5174/api/health  
-- **Database**: localhost:5432 (user: `myoteluser`, password: `myotelpass123`)
-
-## 🛠️ **Useful Commands:**
+## 🚀 **Try running it now:**
 
 ```bash
-# Quick setup
-./setup-podman.sh
+# Clean up any existing containers first
+podman stop myotel-api myotel-postgres 2>/dev/null || true
+podman rm myotel-api myotel-postgres 2>/dev/null || true
 
-# View logs
-podman-compose logs -f api
-
-# Connect to database
-podman exec -it myotel-postgres psql -U myoteluser -d myoteldb
-
-# Rebuild after code changes
-podman-compose down && podman-compose up --build -d
-
-# Clean everything
-podman-compose down && podman volume prune
+# Run the fixed setup
+bash setup-podman.sh
 ```
 
-The setup is configured for development use and will lose data when containers are removed, as requested. The automated setup script will handle all the container orchestration, health checking, and provide you with a ready-to-use API environment!
+## 🔍 **If you still get issues, try these debugging steps:**
+
+```bash
+# Check what containers are running
+podman ps -a
+
+# Check the database logs
+podman logs myotel-postgres
+
+# Check the API logs  
+podman logs myotel-api
+
+# Manual database test
+podman exec -it myotel-postgres psql -U myoteluser -d myoteldb -c "SELECT version();"
+```
+
+The setup should now work much better with podman-compose! The simplified compose file removes the problematic health check syntax while still providing all the functionality you need for development.
